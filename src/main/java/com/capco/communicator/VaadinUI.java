@@ -19,9 +19,9 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("valo")
 public class VaadinUI extends UI {
 
-	private final CustomerRepository repo;
+	private final BankRepository repo;
 
-	private final CustomerEditor editor;
+	private final BankEditor editor;
 
 	final Grid grid;
 
@@ -30,12 +30,12 @@ public class VaadinUI extends UI {
 	private final Button addNewBtn;
 
 	@Autowired
-	public VaadinUI(CustomerRepository repo, CustomerEditor editor) {
+	public VaadinUI(BankRepository repo, BankEditor editor) {
 		this.repo = repo;
 		this.editor = editor;
 		this.grid = new Grid();
 		this.filter = new TextField();
-		this.addNewBtn = new Button("New customer", FontAwesome.PLUS);
+		this.addNewBtn = new Button("New bank", FontAwesome.PLUS);
 	}
 
 	@Override
@@ -51,49 +51,50 @@ public class VaadinUI extends UI {
 		mainLayout.setSpacing(true);
 
 		grid.setHeight(300, Unit.PIXELS);
-		grid.setColumns("id", "firstName", "lastName");
+		grid.setColumns("id", "code", "name");
 
 		filter.setInputPrompt("Filter by last name");
 
 		// Hook logic to components
 
 		// Replace listing with filtered content when user changes filter
-		filter.addTextChangeListener(e -> listCustomers(e.getText()));
+		filter.addTextChangeListener(e -> listBanks(e.getText()));
 
-		// Connect selected Customer to editor or hide if none is selected
+		// Connect selected Bank to editor or hide if none is selected
 		grid.addSelectionListener(e -> {
 			if (e.getSelected().isEmpty()) {
 				editor.setVisible(false);
 			}
 			else {
-				editor.editCustomer((Customer) grid.getSelectedRow());
+				editor.editBank((Bank) grid.getSelectedRow());
 			}
 		});
 
-		// Instantiate and edit new Customer the new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "")));
+		// Instantiate and edit new Bank
+		// the new button is clicked
+		addNewBtn.addClickListener(e -> editor.editBank(new Bank("", "")));
 
 		// Listen changes made by the editor, refresh data from backend
 		editor.setChangeHandler(() -> {
 			editor.setVisible(false);
-			listCustomers(filter.getValue());
+			listBanks(filter.getValue());
 		});
 
 		// Initialize listing
-		listCustomers(null);
+		listBanks(null);
 	}
 
-	// tag::listCustomers[]
-	void listCustomers(String text) {
+	// tag::listBanks[]
+	void listBanks(String text) {
 		if (StringUtils.isEmpty(text)) {
 			grid.setContainerDataSource(
-					new BeanItemContainer(Customer.class, repo.findAll()));
+					new BeanItemContainer(Bank.class, repo.findAll()));
 		}
 		else {
-			grid.setContainerDataSource(new BeanItemContainer(Customer.class,
-					repo.findByLastNameStartsWithIgnoreCase(text)));
+			grid.setContainerDataSource(new BeanItemContainer(Bank.class,
+					repo.findByCodeStartsWithIgnoreCase(text)));
 		}
 	}
-	// end::listCustomers[]
+	// end::listBanks[]
 
 }

@@ -2,10 +2,6 @@ package com.capco.communicator;
 
 import javax.annotation.PostConstruct;
 
-import com.capco.communicator.Customer;
-import com.capco.communicator.CustomerEditor;
-import com.capco.communicator.CustomerRepository;
-import com.capco.communicator.VaadinUI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,52 +23,39 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class VaadinUITests {
 
     @Autowired
-    CustomerRepository repository;
+    BankRepository repository;
     VaadinRequest vaadinRequest = Mockito.mock(VaadinRequest.class);
-    CustomerEditor editor;
+    BankEditor editor;
     VaadinUI vaadinUI;
 
     @Before
     public void setup() {
-        this.editor = new CustomerEditor(this.repository);
+        this.editor = new BankEditor(this.repository);
         this.vaadinUI = new VaadinUI(this.repository, editor);
     }
 
     @Test
-    public void shouldInitializeTheGridWithCustomerRepositoryData() {
-        int customerCount = (int) this.repository.count();
+    public void shouldInitializeTheGridWithBankRepositoryData() {
+        int BankCount = (int) this.repository.count();
 
         vaadinUI.init(this.vaadinRequest);
 
         then(vaadinUI.grid.getColumns()).hasSize(3);
-        then(vaadinUI.grid.getContainerDataSource().getItemIds()).hasSize(customerCount);
+        then(vaadinUI.grid.getContainerDataSource().getItemIds()).hasSize(BankCount);
     }
 
     @Test
     public void shouldFillOutTheGridWithNewData() {
-        int initialCustomerCount = (int) this.repository.count();
+        int initialBankCount = (int) this.repository.count();
         this.vaadinUI.init(this.vaadinRequest);
-        customerDataWasFilled(editor, "Marcin", "Grzejszczak");
+        BankDataWasFilled(editor, "Marcin", "Grzejszczak");
 
         this.editor.save.click();
 
-        then(vaadinUI.grid.getContainerDataSource().getItemIds()).hasSize(initialCustomerCount + 1);
-        then((Customer) vaadinUI.grid.getContainerDataSource().lastItemId())
-                .extracting("firstName", "lastName")
+        then(vaadinUI.grid.getContainerDataSource().getItemIds()).hasSize(initialBankCount + 1);
+        then((Bank) vaadinUI.grid.getContainerDataSource().lastItemId())
+                .extracting("code", "name")
                 .containsExactly("Marcin", "Grzejszczak");
-    }
-
-    @Test
-    public void shouldFilterOutTheGridWithTheProvidedLastName() {
-        this.vaadinUI.init(this.vaadinRequest);
-        this.repository.save(new Customer("Josh", "Long"));
-
-        vaadinUI.listCustomers("Long");
-
-        then(vaadinUI.grid.getContainerDataSource().getItemIds()).hasSize(1);
-        then((Customer) vaadinUI.grid.getContainerDataSource().lastItemId())
-                .extracting("firstName", "lastName")
-                .containsExactly("Josh", "Long");
     }
 
     @Test
@@ -92,25 +75,25 @@ public class VaadinUITests {
         then(this.editor.isVisible()).isTrue();
     }
 
-    private void customerDataWasFilled(CustomerEditor editor, String firstName, String lastName) {
-        this.editor.firstName.setValue(firstName);
-        this.editor.lastName.setValue(lastName);
-        editor.editCustomer(new Customer(firstName, lastName));
+    private void BankDataWasFilled(BankEditor editor, String firstName, String lastName) {
+        this.editor.code.setValue(firstName);
+        this.editor.name.setValue(lastName);
+        editor.editBank(new Bank(firstName, lastName));
     }
 
     @Configuration
     @EnableAutoConfiguration(exclude = VaadinAutoConfiguration.class)
     static class Config {
 
-        @Autowired CustomerRepository repository;
+        @Autowired BankRepository repository;
 
         @PostConstruct
         public void initializeData() {
-            this.repository.save(new Customer("Jack", "Bauer"));
-            this.repository.save(new Customer("Chloe", "O'Brian"));
-            this.repository.save(new Customer("Kim", "Bauer"));
-            this.repository.save(new Customer("David", "Palmer"));
-            this.repository.save(new Customer("Michelle", "Dessler"));
+            this.repository.save(new Bank("Jack", "Bauer"));
+            this.repository.save(new Bank("Chloe", "O'Brian"));
+            this.repository.save(new Bank("Kim", "Bauer"));
+            this.repository.save(new Bank("David", "Palmer"));
+            this.repository.save(new Bank("Michelle", "Dessler"));
         }
 
     }

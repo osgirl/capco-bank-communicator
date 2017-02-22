@@ -14,15 +14,15 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class ApplicationTests {
 
     @Autowired
-    private CustomerRepository repository;
+    private BankRepository repository;
 
     @Test
     public void shouldFillOutComponentsWithDataWhenTheApplicationIsStarted() {
-        then(this.repository.count()).isEqualTo(5);
+        then(this.repository.count()).isEqualTo(2);
     }
 
     @Test
-    public void shouldFindTwoBauerCustomers() {
-        then(this.repository.findByLastNameStartsWithIgnoreCase("Bauer")).hasSize(2);
+    public void shouldFindOneCRAFTBanks() {
+        then(this.repository.findByCodeStartsWithIgnoreCase("CRAFT_STAR404")).hasSize(1);
     }
 }

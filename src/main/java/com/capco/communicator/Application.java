@@ -18,36 +18,33 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner loadData(CustomerRepository repository) {
+	public CommandLineRunner loadData(BankRepository repository) {
 		return (args) -> {
-			// save a couple of customers
-			repository.save(new Customer("Jack", "Bauer"));
-			repository.save(new Customer("Chloe", "O'Brian"));
-			repository.save(new Customer("Kim", "Bauer"));
-			repository.save(new Customer("David", "Palmer"));
-			repository.save(new Customer("Michelle", "Dessler"));
+			// save a couple of banks
+			repository.save(new Bank("CRAFT_STAR404", "Star bank a.s."));
+			repository.save(new Bank("FROZEN918", "Frozen official a.s"));
 
-			// fetch all customers
-			log.info("Customers found with findAll():");
+			// fetch all banks
+			log.info("Banks found with findAll():");
 			log.info("-------------------------------");
-			for (Customer customer : repository.findAll()) {
-				log.info(customer.toString());
+			for (Bank bank : repository.findAll()) {
+				log.info(bank.toString());
 			}
 			log.info("");
 
-			// fetch an individual customer by ID
-			Customer customer = repository.findOne(1L);
-			log.info("Customer found with findOne(1L):");
+			// fetch an individual bank by ID
+			Bank fetchedBank = repository.findOne(1L);
+			log.info("Bank found with findOne(1L):");
 			log.info("--------------------------------");
-			log.info(customer.toString());
+			log.info(fetchedBank.toString());
 			log.info("");
 
-			// fetch customers by last name
-			log.info("Customer found with findByLastNameStartsWithIgnoreCase('Bauer'):");
+			// fetch banks by code
+			log.info("Bank found with findByCodeStartsWithIgnoreCase('CRAFT_STAR404'):");
 			log.info("--------------------------------------------");
-			for (Customer bauer : repository
-					.findByLastNameStartsWithIgnoreCase("Bauer")) {
-				log.info(bauer.toString());
+			for (Bank bank : repository
+					.findByCodeStartsWithIgnoreCase("CRAFT_STAR404")) {
+				log.info(bank.toString());
 			}
 			log.info("");
 		};

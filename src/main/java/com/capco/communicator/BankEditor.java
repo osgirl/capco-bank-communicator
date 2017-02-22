@@ -1,7 +1,5 @@
 package com.capco.communicator;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
@@ -12,6 +10,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * A simple example to introduce building forms. As your real application is
@@ -24,18 +23,18 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 @SpringComponent
 @UIScope
-public class CustomerEditor extends VerticalLayout {
+public class BankEditor extends VerticalLayout {
 
-	private final CustomerRepository repository;
+	private final BankRepository repository;
 
 	/**
-	 * The currently edited customer
+	 * The currently edited bank
 	 */
-	private Customer customer;
+	private Bank bank;
 
-	/* Fields to edit properties in Customer entity */
-	TextField firstName = new TextField("First name");
-	TextField lastName = new TextField("Last name");
+	/* Fields to edit properties in bank entity */
+	TextField code = new TextField("Code");
+	TextField name = new TextField("Name");
 
 	/* Action buttons */
 	Button save = new Button("Save", FontAwesome.SAVE);
@@ -44,10 +43,10 @@ public class CustomerEditor extends VerticalLayout {
 	CssLayout actions = new CssLayout(save, cancel, delete);
 
 	@Autowired
-	public CustomerEditor(CustomerRepository repository) {
+	public BankEditor(BankRepository repository) {
 		this.repository = repository;
 
-		addComponents(firstName, lastName, actions);
+		addComponents(code, name, actions);
 
 		// Configure and style components
 		setSpacing(true);
@@ -56,9 +55,9 @@ public class CustomerEditor extends VerticalLayout {
 		save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
 		// wire action buttons to save, delete and reset
-		save.addClickListener(e -> repository.save(customer));
-		delete.addClickListener(e -> repository.delete(customer));
-		cancel.addClickListener(e -> editCustomer(customer));
+		save.addClickListener(e -> repository.save(bank));
+		delete.addClickListener(e -> repository.delete(bank));
+		cancel.addClickListener(e -> editBank(bank));
 		setVisible(false);
 	}
 
@@ -67,28 +66,28 @@ public class CustomerEditor extends VerticalLayout {
 		void onChange();
 	}
 
-	public final void editCustomer(Customer c) {
-		final boolean persisted = c.getId() != null;
+	public final void editBank(Bank b) {
+		final boolean persisted = b.getId() != null;
 		if (persisted) {
 			// Find fresh entity for editing
-			customer = repository.findOne(c.getId());
+			bank = repository.findOne(b.getId());
 		}
 		else {
-			customer = c;
+			bank = b;
 		}
 		cancel.setVisible(persisted);
 
-		// Bind customer properties to similarly named fields
+		// Bind bank properties to similarly named fields
 		// Could also use annotation or "manual binding" or programmatically
 		// moving values from fields to entities before saving
-		BeanFieldGroup.bindFieldsUnbuffered(customer, this);
+		BeanFieldGroup.bindFieldsUnbuffered(bank, this);
 
 		setVisible(true);
 
 		// A hack to ensure the whole form is visible
 		save.focus();
-		// Select all text in firstName field automatically
-		firstName.selectAll();
+		// Select all text in code field automatically
+		code.selectAll();
 	}
 
 	public void setChangeHandler(ChangeHandler h) {
