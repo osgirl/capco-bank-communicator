@@ -1,4 +1,4 @@
-package com.capco.communicator;
+package com.capco.communicator.schema;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

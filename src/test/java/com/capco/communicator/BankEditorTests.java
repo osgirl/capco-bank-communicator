@@ -1,5 +1,7 @@
 package com.capco.communicator;
 
+import com.capco.communicator.schema.Bank;
+import com.capco.communicator.view.component.BankEditor;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
@@ -18,7 +20,7 @@ public class BankEditorTests {
     private static final String BANK_NAME = "BANK_NAME";
 
     @Mock
-    BankRepository BankRepository;
+    com.capco.communicator.repository.BankRepository BankRepository;
     @InjectMocks
     BankEditor editor;
 

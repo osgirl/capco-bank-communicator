@@ -1,5 +1,7 @@
-package com.capco.communicator;
+package com.capco.communicator.view.component;
 
+import com.capco.communicator.repository.BankRepository;
+import com.capco.communicator.schema.Bank;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
@@ -33,14 +35,14 @@ public class BankEditor extends VerticalLayout {
 	private Bank bank;
 
 	/* Fields to edit properties in bank entity */
-	TextField code = new TextField("Code");
-	TextField name = new TextField("Name");
+	public TextField code = new TextField("Code");
+	public TextField name = new TextField("Name");
 
 	/* Action buttons */
-	Button save = new Button("Save", FontAwesome.SAVE);
-	Button cancel = new Button("Cancel");
-	Button delete = new Button("Delete", FontAwesome.TRASH_O);
-	CssLayout actions = new CssLayout(save, cancel, delete);
+	public Button save = new Button("Save", FontAwesome.SAVE);
+	public Button cancel = new Button("Cancel");
+	public Button delete = new Button("Delete", FontAwesome.TRASH_O);
+	public CssLayout actions = new CssLayout(save, cancel, delete);
 
 	@Autowired
 	public BankEditor(BankRepository repository) {
