@@ -1,10 +1,7 @@
 package com.capco.communicator.view;
 
 import com.capco.communicator.service.AuthService;
-import com.capco.communicator.view.page.AccountsPage;
-import com.capco.communicator.view.page.BanksPage;
-import com.capco.communicator.view.page.DashboardPage;
-import com.capco.communicator.view.page.LoginPage;
+import com.capco.communicator.view.page.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
@@ -46,6 +43,8 @@ public class ApplicationUI extends UI implements ViewDisplay{
                 BanksPage.VIEW_NAME));
         navigationBar.addComponent(createNavigationButton("Accounts",
                 AccountsPage.VIEW_NAME));
+        navigationBar.addComponent(createNavigationButton("PaymentContexts",
+                PaymentContextsPage.VIEW_NAME));
         navigationBar.addComponent(createLogoutButton());
 
         setNavBarVisible(authService.isUserLogged((String)VaadinSession.getCurrent().getAttribute(SESSION_PARAM_USER)));
