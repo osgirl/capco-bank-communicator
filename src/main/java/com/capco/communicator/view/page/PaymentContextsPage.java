@@ -2,6 +2,7 @@ package com.capco.communicator.view.page;
 
 import com.capco.communicator.repository.PaymentContextRepository;
 import com.capco.communicator.schema.PaymentContext;
+import com.capco.communicator.view.component.NavBar;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -22,12 +23,16 @@ public class PaymentContextsPage extends VerticalLayout implements View {
     @Autowired
     private PaymentContextRepository repo;
 
+    @Autowired
+    private NavBar navBar;
+
     private Grid grid;
 
     @PostConstruct
     void init() {
         this.grid = new Grid();
 
+        addComponent(navBar);
         initLayout();
     }
 

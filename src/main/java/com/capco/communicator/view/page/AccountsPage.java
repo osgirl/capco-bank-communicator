@@ -2,6 +2,7 @@ package com.capco.communicator.view.page;
 
 import com.capco.communicator.repository.AccountRepository;
 import com.capco.communicator.schema.Account;
+import com.capco.communicator.view.component.NavBar;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -23,6 +24,9 @@ public class AccountsPage extends VerticalLayout implements View {
     @Autowired
     private AccountRepository repo;
 
+    @Autowired
+    private NavBar navBar;
+
     private Grid grid;
     private TextField filter;
 
@@ -31,6 +35,7 @@ public class AccountsPage extends VerticalLayout implements View {
         this.grid = new Grid();
         this.filter = new TextField();
 
+        addComponent(navBar);
         initLayout();
     }
 

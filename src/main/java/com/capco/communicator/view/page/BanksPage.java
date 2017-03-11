@@ -3,6 +3,7 @@ package com.capco.communicator.view.page;
 import com.capco.communicator.repository.BankRepository;
 import com.capco.communicator.schema.Bank;
 import com.capco.communicator.view.component.BankEditor;
+import com.capco.communicator.view.component.NavBar;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -27,6 +28,9 @@ public class BanksPage extends VerticalLayout implements View {
     @Autowired
     private BankEditor editor;
 
+    @Autowired
+    private NavBar navBar;
+
 	public Grid grid;
     public TextField filter;
     private Button addNewBtn;
@@ -37,6 +41,7 @@ public class BanksPage extends VerticalLayout implements View {
         this.filter = new TextField();
         this.addNewBtn = new Button("New bank", FontAwesome.PLUS);
 
+		addComponent(navBar);
         initLayout();
     }
 

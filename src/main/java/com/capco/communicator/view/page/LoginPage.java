@@ -44,7 +44,7 @@ public class LoginPage extends VerticalLayout implements View{
                 if(authService.authenticate(username.getValue(), password.getValue())){
                     VaadinSession.getCurrent().setAttribute(ApplicationUI.SESSION_PARAM_USER, username.getValue());
 
-                    ApplicationUI.setNavBarVisible(true);
+//                    ApplicationUI.setNavBarVisible(true);
                     getUI().getNavigator().navigateTo(DashboardPage.VIEW_NAME);
 
                 }else{

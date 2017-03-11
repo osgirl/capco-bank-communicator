@@ -15,8 +15,12 @@ public class AuthServiceImpl implements AuthService{
 
     private List<String> loggedUsers = new ArrayList<>();
 
+    private final AccountRepository accountRepository;
+
     @Autowired
-    AccountRepository accountRepository;
+    public AuthServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public boolean authenticate(String login, String password) {
