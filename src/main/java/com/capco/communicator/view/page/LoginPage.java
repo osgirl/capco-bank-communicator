@@ -26,16 +26,19 @@ public class LoginPage extends VerticalLayout implements View{
     void init() {
         Panel panel = new Panel("Login");
         panel.setSizeUndefined();
+        panel.setId("loginpanel");
         addComponent(panel);
         FormLayout content = new FormLayout();
 
         TextField username = new TextField("Username");
+        username.setId("usernameinput");
         content.addComponent(username);
         PasswordField password = new PasswordField("Password");
+        password.setId("passwordinput");
         content.addComponent(password);
 
         Button send = new Button("Enter");
-
+        send.setId("loginbutton");
         send.addClickListener(new Button.ClickListener() {
             private static final long serialVersionUID = 1L;
 
