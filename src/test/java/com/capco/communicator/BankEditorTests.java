@@ -4,6 +4,7 @@ import com.capco.communicator.schema.Bank;
 import com.capco.communicator.view.component.BankEditor;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.argThat;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class BankEditorTests {
 
