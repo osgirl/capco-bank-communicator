@@ -28,9 +28,6 @@ public class BanksPage extends VerticalLayout implements View {
     @Autowired
     private BankEditor editor;
 
-    @Autowired
-    private NavBar navBar;
-
 	public Grid grid;
     public TextField filter;
     private Button addNewBtn;
@@ -41,7 +38,7 @@ public class BanksPage extends VerticalLayout implements View {
         this.filter = new TextField();
         this.addNewBtn = new Button("New bank", FontAwesome.PLUS);
 
-		addComponent(navBar);
+//		addComponent(navBar);
         initLayout();
     }
 

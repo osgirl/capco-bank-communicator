@@ -24,8 +24,8 @@ public class AccountsPage extends VerticalLayout implements View {
     @Autowired
     private AccountRepository repo;
 
-    @Autowired
-    private NavBar navBar;
+//    @Autowired
+//    private NavBar navBar;
 
     private Grid grid;
     private TextField filter;
@@ -35,7 +35,7 @@ public class AccountsPage extends VerticalLayout implements View {
         this.grid = new Grid();
         this.filter = new TextField();
 
-        addComponent(navBar);
+//        addComponent(navBar);
         initLayout();
     }
 

@@ -3,6 +3,7 @@ package com.capco.communicator.view.page;
 
 import com.capco.communicator.service.AuthService;
 import com.capco.communicator.view.ApplicationUI;
+import com.capco.communicator.view.component.NavBar;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
@@ -21,6 +22,14 @@ public class LoginPage extends VerticalLayout implements View{
 
     @Autowired
     AuthService authService;
+
+//    @Autowired
+//    NavBar navBar;
+
+//    public LoginPage(){
+//        init();
+//        this.authService = ((ApplicationUI)getUI()).authService;
+//    }
 
     @PostConstruct
     void init() {

@@ -23,8 +23,8 @@ public class PaymentContextsPage extends VerticalLayout implements View {
     @Autowired
     private PaymentContextRepository repo;
 
-    @Autowired
-    private NavBar navBar;
+//    @Autowired
+//    private NavBar navBar;
 
     private Grid grid;
 
@@ -32,7 +32,7 @@ public class PaymentContextsPage extends VerticalLayout implements View {
     void init() {
         this.grid = new Grid();
 
-        addComponent(navBar);
+//        addComponent(navBar);
         initLayout();
     }
 
