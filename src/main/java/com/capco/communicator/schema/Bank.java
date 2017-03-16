@@ -15,8 +15,7 @@ public class Bank {
 
 	private String name;
 
-	protected Bank() {
-	}
+	protected Bank() {}
 
 	public Bank(String code, String name) {
 		this.code = code;

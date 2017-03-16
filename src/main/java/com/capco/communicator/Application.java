@@ -79,7 +79,7 @@ public class Application {
     }
 
     private static void initAccounts(AccountRepository repository) {
-        repository.save(new Account("test", "123456"));
+        repository.save(new Account("test", "123456", "Anakin", "Skywalker"));
         repository.save(new Account("Jozko", "123456"));
         repository.save(new Account("Ferko", "123456"));
     }
