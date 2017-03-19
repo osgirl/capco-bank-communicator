@@ -2,9 +2,11 @@ package com.capco.communicator.view.page;
 
 import com.capco.communicator.repository.AccountRepository;
 import com.capco.communicator.schema.Account;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
@@ -24,18 +26,17 @@ public class AccountsView extends Panel implements View{
     @Autowired
     private AccountRepository repo;
 
-    private Grid grid;
-    private TextField filter;
+//    private Grid grid;
+    private Table table;
 
     @PostConstruct
     void init(){
-        addStyleName(ValoTheme.PANEL_BORDERLESS);
-        setSizeFull();
-
         VerticalLayout root = new VerticalLayout();
+
+        root.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        root.addStyleName("transactions");
+
         root.setSizeFull();
-        root.setMargin(true);
-        root.addStyleName("dashboard-view");
         setContent(root);
         Responsive.makeResponsive(root);
 
@@ -47,49 +48,89 @@ public class AccountsView extends Panel implements View{
         HorizontalLayout header = new HorizontalLayout();
         header.addStyleName("viewheader");
         header.setSpacing(true);
+        Responsive.makeResponsive(header);
 
-        Label titleLabel = new Label("Accounts");
+        Label titleLabel = new Label("Banks");
         titleLabel.setSizeUndefined();
         titleLabel.addStyleName(ValoTheme.LABEL_H1);
         titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
         header.addComponent(titleLabel);
 
+        HorizontalLayout tools = new HorizontalLayout(buildSearch());
+        tools.setSpacing(true);
+        tools.addStyleName("toolbar");
+        header.addComponent(tools);
+
         return header;
     }
 
     private Component buildBody(){
-        VerticalLayout body = new VerticalLayout();
+        table = new Table() {
 
-        this.grid = new Grid();
-        this.filter = new TextField();
+            @Override
+            protected String formatPropertyValue(final Object rowId, final Object colId, final Property<?> property) {
+                return super.formatPropertyValue(rowId, colId, property);
+            }
+        };
 
-        HorizontalLayout actions = new HorizontalLayout(filter);
-        VerticalLayout mainLayout = new VerticalLayout(actions, grid);
-        body.addComponent(mainLayout);
+        table.setSizeFull();
+        table.addStyleName(ValoTheme.TABLE_BORDERLESS);
+        table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+        table.addStyleName(ValoTheme.TABLE_COMPACT);
+        table.setSelectable(true);
 
-        //Configure layouts and components
-        actions.setSpacing(true);
-        mainLayout.setMargin(true);
-        mainLayout.setSpacing(true);
+        table.setColumnCollapsingAllowed(true);
+        table.setColumnReorderingAllowed(true);
+        table.setSortAscending(false);
 
-        grid.setHeight(300, Unit.PIXELS);
-        grid.setColumns("id", "login", "firstName", "lastName");
+        listAccounts(null);
+        table.setVisibleColumns("id", "login", "firstName", "lastName");
+        table.setColumnHeaders("id", "login", "firstName", "lastName");
 
-        //Init the filter
-        filter.setInputPrompt("Filter by login");
-        filter.addTextChangeListener(e -> listAccounts(e.getText()));
+        table.setFooterVisible(true);
+        table.setColumnFooter("time", "Total");
 
-        //Initialize listing
+//        table.addValueChangeListener(e -> {
+//            Account selected = (Account)e.getProperty().getValue();
+//            if (selected == null || selected.getId() == null) {
+//                editor.setVisible(false);
+//            }else {
+//                editor.editBank(selected);
+//            }
+//        });
+
+        table.setImmediate(true);
+        table.setFooterVisible(false);
+
+
+//        editor.setChangeHandler(() -> {
+//            editor.setVisible(false);
+//            listBanks(filter.getValue());
+//        });
+
         listAccounts(null);
 
+        VerticalLayout body = new VerticalLayout(table);
+        body.setExpandRatio(table, 1);
+        body.setStyleName(ValoTheme.PANEL_BORDERLESS);
         return body;
+    }
+
+    private Component buildSearch() {
+        TextField filter = new TextField();
+        filter.setInputPrompt("Filter by login");
+        filter.setIcon(FontAwesome.SEARCH);
+        filter.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+
+        filter.addTextChangeListener(e -> listAccounts(e.getText()));
+        return filter;
     }
 
     void listAccounts(String text) {
         if (StringUtils.isEmpty(text)) {
-            grid.setContainerDataSource(new BeanItemContainer(Account.class, repo.findAll()));
-        }else {
-            grid.setContainerDataSource(new BeanItemContainer(Account.class,
+            table.setContainerDataSource(new BeanItemContainer(Account.class, repo.findAll()));
+        } else {
+            table.setContainerDataSource(new BeanItemContainer(Account.class,
                     repo.findByLoginStartsWithIgnoreCase(text)));
         }
     }

@@ -13,6 +13,13 @@ public class PaymentContext {
     public PaymentContext() {
     }
 
+    public PaymentContext(String resource, State state, Date createdAt, String channel) {
+        this.resource = resource;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.channel = channel;
+    }
+
     @Id
     @GeneratedValue
     private Long id;

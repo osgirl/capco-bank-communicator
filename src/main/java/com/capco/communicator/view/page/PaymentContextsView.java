@@ -2,6 +2,7 @@ package com.capco.communicator.view.page;
 
 import com.capco.communicator.repository.PaymentContextRepository;
 import com.capco.communicator.schema.PaymentContext;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -18,24 +19,21 @@ import javax.annotation.PostConstruct;
 @SpringView(name = PaymentContextsView.VIEW_NAME)
 public class PaymentContextsView extends Panel implements View {
 
+    public static final String VIEW_NAME = "payment-context";
+
     @Autowired
     private PaymentContextRepository repo;
 
-    public static final String VIEW_NAME = "payment-context";
-
-    private VerticalLayout root = new VerticalLayout();
-    private Label titleLabel;
-    private Grid grid;
+    private Table table;
 
     @PostConstruct
     void init(){
-        addStyleName(ValoTheme.PANEL_BORDERLESS);
-        setSizeFull();
+        VerticalLayout root = new VerticalLayout();
 
-        root = new VerticalLayout();
+        root.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        root.addStyleName("transactions");
+
         root.setSizeFull();
-        root.setMargin(true);
-        root.addStyleName("dashboard-view");
         setContent(root);
         Responsive.makeResponsive(root);
 
@@ -58,28 +56,45 @@ public class PaymentContextsView extends Panel implements View {
     }
 
     private Component buildBody(){
-        VerticalLayout body = new VerticalLayout();
+        table = new Table() {
 
-        grid = new Grid();
-        VerticalLayout mainLayout = new VerticalLayout(grid);
-        body.addComponent(mainLayout);
+            @Override
+            protected String formatPropertyValue(final Object rowId, final Object colId, final Property<?> property) {
+                return super.formatPropertyValue(rowId, colId, property);
+            }
+        };
 
-        //Configure layouts and components
-        mainLayout.setMargin(true);
-        mainLayout.setSpacing(true);
+        table.setSizeFull();
+        table.addStyleName(ValoTheme.TABLE_BORDERLESS);
+        table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+        table.addStyleName(ValoTheme.TABLE_COMPACT);
+        table.setSelectable(true);
 
-        grid.setHeight(300, Unit.PIXELS);
-        grid.setColumns("id", "state");
+        table.setColumnCollapsingAllowed(true);
+        table.setColumnReorderingAllowed(true);
+        table.setSortAscending(false);
+
+        listPaymentContexts();
+        table.setVisibleColumns("id", "resource", "state", "createdAt", "channel");
+        table.setColumnHeaders("id", "resource", "state", "createdAt", "channel");
+
+        table.setFooterVisible(true);
+        table.setColumnFooter("time", "Total");
+
+        table.setImmediate(true);
+        table.setFooterVisible(false);
 
         //Initialize listing
         listPaymentContexts();
 
+        VerticalLayout body = new VerticalLayout(table);
+        body.setExpandRatio(table, 1);
+        body.setStyleName(ValoTheme.PANEL_BORDERLESS);
         return body;
     }
 
     void listPaymentContexts() {
-        grid.setContainerDataSource(
-                new BeanItemContainer(PaymentContext.class, repo.findAll()));
+        table.setContainerDataSource(new BeanItemContainer(PaymentContext.class, repo.findAll()));
     }
 
     @Override
