@@ -99,6 +99,6 @@ public class PaymentContextsView extends Panel implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        listPaymentContexts();
     }
 }

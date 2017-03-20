@@ -23,9 +23,9 @@ import java.util.Date;
 public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
-    private static final Integer NUM_OF_GENERATED_BANKS = 10;
-    private static final Integer NUM_OF_GENERATED_ACCOUNTS = 10;
-    private static final Integer NUM_OF_GENERATED_PAYMENT_CONTEXTS = 10;
+    private static final Integer NUM_OF_GENERATED_BANKS = 4;
+    private static final Integer NUM_OF_GENERATED_ACCOUNTS = 4;
+    private static final Integer NUM_OF_GENERATED_PAYMENT_CONTEXTS = 0;
 
     @Autowired
     private FtpWorker ftpWorker;
