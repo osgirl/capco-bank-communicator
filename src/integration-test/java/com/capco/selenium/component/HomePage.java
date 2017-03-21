@@ -1,5 +1,6 @@
 package com.capco.selenium.component;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +12,10 @@ public class HomePage extends BasePage {
 
     @FindBy(linkText = "Home")
     private WebElement homeButton;
+
+    HomePage(WebDriver webDriver) {
+        super(webDriver);
+    }
 
     @Override
     public void baseLoadConditionForPage() {

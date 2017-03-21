@@ -21,12 +21,10 @@ public class JUnitExecutionListener extends RunListener {
 
     public void testFinished(Description description) throws Exception {
         System.out.println("Finished: " + description.getMethodName());
-        WebDriverProvider.closeWebdriver();
     }
 
     public void testFailure(Failure failure) throws Exception {
         System.out.println("Failed: " + failure.getDescription().getMethodName());
-        WebDriverProvider.closeWebdriver();
     }
 
     public void testAssumptionFailure(Failure failure) {

@@ -1,5 +1,6 @@
 package com.capco.selenium.component;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,8 +25,12 @@ public class LoginPage extends BasePage {
         webDriverWait.until(ExpectedConditions.visibilityOf(usernameInput));
     }
 
-    public static LoginPage navigateToLoginPage(){
-        LoginPage loginPage = new LoginPage();
+    LoginPage(WebDriver webDriver) {
+        super(webDriver);
+    }
+
+    public static LoginPage navigateToLoginPage(WebDriver driver){
+        LoginPage loginPage = new LoginPage(driver);
         loginPage.driver.navigate().to(baseUrl);
         return loginPage;
     }
@@ -44,12 +49,12 @@ public class LoginPage extends BasePage {
 
     public HomePage successfulLogin(String username, String password){
         login(username, password);
-        return new HomePage();
+        return new HomePage(driver);
     }
 
-    public LoginPage wronLogin(String username, String password){
+    public LoginPage wrongLogin(String username, String password){
         login(username, password);
-        return new LoginPage();
+        return new LoginPage(driver);
     }
 
     private void login(String username, String password) {

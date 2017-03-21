@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
  * Created by SBRJ on 14. 3. 2017.
  */
 @RunWith(MyRunner.class)
-public class LoginTest {
+public class LoginTest extends BaseTest{
 
     @Test
     public void appearanceOfLoginPageTest() {
-        LoginPage loginPage = LoginPage.navigateToLoginPage();
+        LoginPage loginPage = LoginPage.navigateToLoginPage(driver);
 
         Assert.assertTrue(loginPage.isUsernameInputDisplayed());
         Assert.assertTrue(loginPage.isPasswordInputDisplayed());
@@ -24,15 +24,15 @@ public class LoginTest {
 
     @Test
     public void givenWrongCredentialsWhenLoginThenNotLoggedIn() {
-        LoginPage loginPage = LoginPage.navigateToLoginPage();
-        loginPage.wronLogin("wrong_name", "wrong_password");
+        LoginPage loginPage = LoginPage.navigateToLoginPage(driver);
+        loginPage.wrongLogin("wrong_name", "wrong_password");
 
         Assert.assertTrue(loginPage.isEnterButtonDisplayed());
     }
 
     @Test
-    public void givenCorrectCredentialsWhenLoginDashboardIsDisplayed(){
-        LoginPage loginPage = LoginPage.navigateToLoginPage();
+    public void givenCorrectCredentialsWhenLoginDashboardIsDisplayed() {
+        LoginPage loginPage = LoginPage.navigateToLoginPage(driver);
         HomePage homePage = loginPage.successfulLogin("test", "123456");
 
         Assert.assertTrue(homePage.isHomeButtonPresent());

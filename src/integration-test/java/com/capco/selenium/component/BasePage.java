@@ -9,13 +9,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public abstract class BasePage implements Assertable {
 
-    protected static WebDriver driver;
+    protected WebDriver driver;
     protected WebDriverWait webDriverWait;
     protected static final String baseUrl = Config.getConfig().getBaseUrl();
 
-
-    BasePage() {
-        driver = WebDriverProvider.getInstance();
+    BasePage(WebDriver webDriver) {
+        driver = webDriver;
         webDriverWait = new WebDriverWait(driver, 6);
         PageFactory.initElements(driver, this);
     }
