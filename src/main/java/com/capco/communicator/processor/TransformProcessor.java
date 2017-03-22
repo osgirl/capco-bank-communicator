@@ -10,11 +10,14 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 
 @Service
 public class TransformProcessor extends PaymentProcessor {
 
-    private static final String xsltPath = "xslt/paymentA.xslt";
+    public static final String DEFAULT_CHAR_ENCODING = "UTF-8";
+
+    private static final String xsltPath = "src/main/resources/xslt/paymentA.xslt";
 
     private TransformerFactory factory = TransformerFactory.newInstance();
 
@@ -32,14 +35,18 @@ public class TransformProcessor extends PaymentProcessor {
 
             transformer.transform(xmlInput, xmlOutput);
 
-            paymentContext.setResource(xmlOutput.getWriter().toString());
+            paymentContext.setPayload(xmlOutput.getWriter().toString().getBytes(DEFAULT_CHAR_ENCODING));
+            paymentContext.setState(State.DUPLICATE_CHECK);
 
-        } catch (TransformerException e) {
-            //TODO - error handling
-            e.printStackTrace();
+        } catch (TransformerException | UnsupportedEncodingException e) {
+            paymentContext.setState(State.TRANSFORM_ERROR);
+//            e.printStackTrace();
         }
 
-        paymentContext.setState(State.DUPLICATE_CHECK);
+        if(paymentContext.getPayload() == null || paymentContext.getPayload().length == 0){
+            paymentContext.setState(State.TRANSFORM_ERROR);
+        }
+
         paymentContextRepository.save(paymentContext);
     }
 

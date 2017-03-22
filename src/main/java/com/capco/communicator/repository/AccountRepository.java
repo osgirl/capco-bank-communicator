@@ -9,5 +9,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
 
     Account findByLogin(String login);
 
+    Account findByCode(String code);
+
     List<Account> findByLoginStartsWithIgnoreCase(String login);
 }

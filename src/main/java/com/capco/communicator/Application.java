@@ -94,10 +94,10 @@ public class Application {
     }
 
     private static void initAccounts(AccountRepository repository) {
-        repository.save(new Account("test", "123456", "Anakin", "Skywalker"));
+        repository.save(new Account("DE44-5001-0517-5407-3249-31", "test", "123456", "Anakin", "Skywalker"));
 
         for(int i = 0; i < NUM_OF_GENERATED_ACCOUNTS; i++){
-            repository.save(new Account("Account_" + i + "_login", "123456",
+            repository.save(new Account("Account_" + i + "_CODE", "Account_" + i + "_login", "123456",
                     "Account_" + i + "-firstName", "Account_" + i + "-lastName"));
         }
     }

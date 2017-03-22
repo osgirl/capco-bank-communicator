@@ -11,6 +11,8 @@ public class Account {
     @GeneratedValue
     private Long id;
 
+    private String code;
+
     private String login;
     private String password;
 
@@ -24,7 +26,8 @@ public class Account {
         this.password = password;
     }
 
-    public Account(String login, String password, String firstName, String lastName) {
+    public Account(String code, String login, String password, String firstName, String lastName) {
+        this.code = code;
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -33,6 +36,14 @@ public class Account {
 
     public Long getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getLogin() {
@@ -71,6 +82,7 @@ public class Account {
     public String toString() {
         return "Account{" +
                 "id=" + id +
+                ", code='" + code + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

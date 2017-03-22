@@ -1,5 +1,8 @@
 package com.capco.communicator.schema;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,11 +29,14 @@ public class PaymentContext {
 
     private String resource;
 
+    private byte[] payload;
+
     private State state;
 
     private Date createdAt;
 
     @ManyToOne
+    @Cascade(CascadeType.ALL)
     private Payment payment;
 
     private String channel;
@@ -83,4 +89,11 @@ public class PaymentContext {
         this.channel = channel;
     }
 
+    public byte[] getPayload() {
+        return payload;
+    }
+
+    public void setPayload(byte[] payload) {
+        this.payload = payload;
+    }
 }

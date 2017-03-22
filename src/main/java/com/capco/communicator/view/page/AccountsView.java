@@ -84,8 +84,8 @@ public class AccountsView extends Panel implements View{
         table.setSortAscending(false);
 
         listAccounts(null);
-        table.setVisibleColumns("id", "login", "firstName", "lastName");
-        table.setColumnHeaders("id", "login", "firstName", "lastName");
+        table.setVisibleColumns("id", "code", "login", "firstName", "lastName");
+        table.setColumnHeaders("id", "code", "login", "firstName", "lastName");
 
         table.setFooterVisible(true);
         table.setColumnFooter("time", "Total");

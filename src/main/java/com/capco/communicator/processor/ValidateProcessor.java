@@ -18,7 +18,7 @@ import java.io.StringReader;
 @Service
 public class ValidateProcessor extends PaymentProcessor {
 
-    private static final String schemaLocation = "schemas/paymentA.xsd";
+    private static final String schemaLocation = "src/main/resources/schemas/paymentA.xsd";
 
     private SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
@@ -42,9 +42,9 @@ public class ValidateProcessor extends PaymentProcessor {
             paymentContext.setState(State.TRANSFORM);
 
         } catch (SAXException | IOException e) {
-
-            paymentContext.setState(State.TRANSFORM_ERROR);
-            e.printStackTrace();
+            paymentContext.setState(State.VALIDATE_ERROR);
+//            paymentContext.setState(State.TRANSFORM_ERROR);
+//            e.printStackTrace();
         }
 
         paymentContextRepository.save(paymentContext);
