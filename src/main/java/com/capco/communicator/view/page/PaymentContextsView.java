@@ -5,6 +5,7 @@ import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
@@ -26,6 +27,7 @@ public class PaymentContextsView extends Panel implements View {
     private PaymentContextRepository repo;
 
     private Table table;
+    private Window paymentDetailWindow;
 
     @PostConstruct
     void init(){
@@ -100,53 +102,77 @@ public class PaymentContextsView extends Panel implements View {
                 PaymentContext.F_CREATED_AT,
                 PaymentContext.F_CHANNEL);
 
-        table.addGeneratedColumn("Change State", new Table.ColumnGenerator() {
+        table.addGeneratedColumn("Change State", (Table.ColumnGenerator) (source, item, columnId) -> {
+            ComboBox stateSelect = new ComboBox("Select new State");
+            stateSelect.setNewItemsAllowed(false);
+            stateSelect.addStyleName(ValoTheme.COMBOBOX_SMALL);
+            stateSelect.addItems(State.values());
+            stateSelect.setValue(((PaymentContext)item).getState());
 
-            @Override
-            public Object generateCell(Table source, Object item, Object columnId) {
-                ComboBox stateSelect = new ComboBox("Select new State");
-                stateSelect.setNewItemsAllowed(false);
-                stateSelect.addStyleName(ValoTheme.COMBOBOX_SMALL);
-                stateSelect.addItems(State.values());
-                stateSelect.setValue(((PaymentContext)item).getState());
+            stateSelect.addValueChangeListener((Property.ValueChangeListener) event -> {
+                ((PaymentContext)item).setState((State)event.getProperty().getValue());
+                repo.save((PaymentContext) item);
+                listPaymentContexts();
 
-                stateSelect.addValueChangeListener(new Property.ValueChangeListener() {
+            });
 
-                    @Override
-                    public void valueChange(Property.ValueChangeEvent event) {
-                        ((PaymentContext)item).setState((State)event.getProperty().getValue());
-                        repo.save((PaymentContext) item);
-                        listPaymentContexts();
-
-                    }
-                });
-
-                return stateSelect;
-            }
+            return stateSelect;
         });
 
-        table.addGeneratedColumn("Action", (Table.ColumnGenerator) (source, itemId, columnId) -> {
-            Button btn = new Button("View Payments");
+        table.addGeneratedColumn("Payment Detail", (Table.ColumnGenerator) (source, item, columnId) -> {
+            Button btn = new Button("Show");
             btn.addStyleName(ValoTheme.BUTTON_SMALL);
+
             btn.addClickListener((Button.ClickListener) event -> {
-                //TODO - redirect to payments view with filtered payments of this context
+                openPaymentDetailPopup(event, (PaymentContext)item);
             });
+
             return btn;
         });
 
-//        table.setFooterVisible(true);
-//        table.setColumnFooter("time", "Total");
-
         table.setImmediate(true);
         table.setFooterVisible(false);
-
-        //Initialize listing
-//        listPaymentContexts();
 
         VerticalLayout body = new VerticalLayout(table);
         body.setExpandRatio(table, 1);
         body.setStyleName(ValoTheme.PANEL_BORDERLESS);
         return body;
+    }
+
+    private void openPaymentDetailPopup(Button.ClickEvent event, PaymentContext paymentContext){
+        VerticalLayout paymentDetailContentLayout = new VerticalLayout();
+        paymentDetailContentLayout.setMargin(true);
+        paymentDetailContentLayout.setSpacing(true);
+
+        Label title = new Label("Payment ID' " + paymentContext.getPayment().getId() + "' detial:");
+        title.addStyleName(ValoTheme.LABEL_H3);
+        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+        title.addStyleName(ValoTheme.LABEL_BOLD);
+        paymentDetailContentLayout.addComponent(title);
+
+        paymentDetailContentLayout.addComponent(new Label("Bank code: " + paymentContext.getPayment().getBank().getCode()));
+        paymentDetailContentLayout.addComponent(new Label("Account code: " + paymentContext.getPayment().getAccount().getCode()));
+        paymentDetailContentLayout.addComponent(new Label("Credit: " + paymentContext.getPayment().getCredit()));
+        paymentDetailContentLayout.addComponent(new Label("Debit:  " + paymentContext.getPayment().getDebit()));
+
+        if (paymentDetailWindow == null) {
+            paymentDetailWindow = new Window();
+            paymentDetailWindow.setWidth(400.0f, Unit.PIXELS);
+            paymentDetailWindow.addStyleName("notifications");
+            paymentDetailWindow.setClosable(true);
+            paymentDetailWindow.setResizable(true);
+            paymentDetailWindow.setDraggable(false);
+            paymentDetailWindow.setCloseShortcut(ShortcutAction.KeyCode.ESCAPE, null);
+            paymentDetailWindow.setContent(paymentDetailContentLayout);
+        }
+
+        if (!paymentDetailWindow.isAttached()) {
+            paymentDetailWindow.setPositionY(event.getClientY() - event.getRelativeY() + 40);
+            getUI().addWindow(paymentDetailWindow);
+            paymentDetailWindow.focus();
+        } else {
+            paymentDetailWindow.close();
+        }
     }
 
     void listPaymentContexts() {

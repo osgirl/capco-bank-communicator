@@ -35,6 +35,11 @@ public class Application {
     @Autowired
     private PaymentWorker paymentWorker;
 
+    private static BankRepository bankRepository;
+    private static AccountRepository accountRepository;
+    private static PaymentContextRepository paymentContextRepository;
+    private static PaymentRepository paymentRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
     }
@@ -42,14 +47,19 @@ public class Application {
     @Bean
     public CommandLineRunner loadData(BankRepository banksRepository, AccountRepository accountRepository,
                                       PaymentContextRepository paymentContextRepository, PaymentRepository paymentRepository) {
-        return (args) -> {
 
+        Application.bankRepository = banksRepository;
+        Application.accountRepository = accountRepository;
+        Application.paymentContextRepository = paymentContextRepository;
+        Application.paymentRepository = paymentRepository;
+
+        return (args) -> {
             initWorkers();
 
-            initBanks(banksRepository);
-            initAccounts(accountRepository);
-            initPaymentContexts(paymentContextRepository);
-            initPayments(paymentRepository, banksRepository, accountRepository);
+            initBanks();
+            initAccounts();
+            initPaymentContexts();
+            initPayments();
         };
     }
 
@@ -61,26 +71,26 @@ public class Application {
         paymentThread.start();
     }
 
-    private static void initBanks(BankRepository repository) {
+    private static void initBanks() {
 
         // save a couple of banks
-        repository.save(new Bank(TEST_BANK_CODE, "Star bank a.s."));
-        repository.save(new Bank("FROZEN918", "Frozen official a.s"));
+        bankRepository.save(new Bank(TEST_BANK_CODE, "Star bank a.s."));
+        bankRepository.save(new Bank("FROZEN918", "Frozen official a.s"));
 
         for(int i = 0; i < NUM_OF_GENERATED_BANKS; i++){
-            repository.save(new Bank("BANK" + i + "_code", "Bank " + i + " a.s."));
+            bankRepository.save(new Bank("BANK" + i + "_code", "Bank " + i + " a.s."));
         }
 
         // fetch all banks
         log.info("Banks found with findAll():");
         log.info("-------------------------------");
-        for (Bank bank : repository.findAll()) {
+        for (Bank bank : bankRepository.findAll()) {
             log.info(bank.toString());
         }
         log.info("");
 
         // fetch an individual bank by ID
-        Bank fetchedBank = repository.findOne(1L);
+        Bank fetchedBank = bankRepository.findOne(1L);
         log.info("Bank found with findOne(1L):");
         log.info("--------------------------------");
         log.info(fetchedBank.toString());
@@ -89,31 +99,43 @@ public class Application {
         // fetch banks by code
         log.info("Bank found with findByCodeStartsWithIgnoreCase('CRAFT_STAR404'):");
         log.info("--------------------------------------------");
-        for (Bank bank : repository
+        for (Bank bank : bankRepository
                 .findByCodeStartsWithIgnoreCase("CRAFT_STAR404")) {
             log.info(bank.toString());
         }
         log.info("");
     }
 
-    private static void initAccounts(AccountRepository repository) {
-        repository.save(new Account(TEST_ACCOUNTS_CODE, "test", "123456", "Anakin", "Skywalker"));
+    private static void initAccounts() {
+        accountRepository.save(new Account(TEST_ACCOUNTS_CODE, "test", "123456", "Anakin", "Skywalker"));
 
         for(int i = 0; i < NUM_OF_GENERATED_ACCOUNTS; i++){
-            repository.save(new Account("Account_" + i + "_CODE", "Account_" + i + "_login", "123456",
+            accountRepository.save(new Account("Account_" + i + "_CODE", "Account_" + i + "_login", "123456",
                     "Account_" + i + "-firstName", "Account_" + i + "-lastName"));
         }
     }
 
-    private static void initPaymentContexts(PaymentContextRepository repository){
+    private static void initPaymentContexts(){
         for(int i = 0; i < NUM_OF_GENERATED_PAYMENT_CONTEXTS; i++){
-            repository.save(new PaymentContext("Context_" + i + "_resource", State.VALIDATE_ERROR,
-                    new Date(), "Context_" + i + "-channel"));
+            PaymentContext paymentContext = new PaymentContext();
+            paymentContext.setResource("Context_" + i + "_resource");
+            paymentContext.setState(State.VALIDATE);
+            paymentContext.setCreatedAt(new Date());
+            paymentContext.setChannel("Context_" + i + "-channel");
+
+            Payment payment = new Payment();
+            payment.setBank(bankRepository.findByCode(TEST_BANK_CODE));
+            payment.setAccount(accountRepository.findByCode(TEST_ACCOUNTS_CODE));
+            payment.setCredit(126);
+            payment.setDebit(0);
+
+            paymentContext.setPayment(payment);
+
+            paymentContextRepository.save(paymentContext);
         }
     }
 
-    private static void initPayments(PaymentRepository repository, BankRepository bankRepository,
-                                     AccountRepository accountRepository){
+    private static void initPayments(){
 
         for(int i = 0; i < NUM_OF_GENERATED_PAYMENTS; i++){
             Payment payment = new Payment();
@@ -122,7 +144,7 @@ public class Application {
             payment.setCredit(10*(i+1));
             payment.setDebit((i + 3));
 
-            repository.save(payment);
+            paymentRepository.save(payment);
         }
     }
 }
