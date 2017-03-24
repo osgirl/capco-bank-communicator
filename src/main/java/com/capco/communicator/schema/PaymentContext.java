@@ -11,7 +11,15 @@ import java.util.Date;
 
 
 @Entity
-public class PaymentContext {
+public class PaymentContext extends AbstractProcessingContext{
+
+    public static final String F_ID =         "id";
+    public static final String F_RESOURCE =   "resource";
+    public static final String F_PAYLOAD =    "payload";
+    public static final String F_STATE =      "state";
+    public static final String F_CREATED_AT = "createdAt";
+    public static final String F_PAYMENT =    "payment";
+    public static final String F_CHANNEL =    "channel";
 
     public PaymentContext() {
     }
@@ -21,6 +29,11 @@ public class PaymentContext {
         this.state = state;
         this.createdAt = createdAt;
         this.channel = channel;
+    }
+
+    @Override
+    public void addErrorLog(String log) {
+        getErrorLog().add(log);
     }
 
     @Id

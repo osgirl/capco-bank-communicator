@@ -1,9 +1,12 @@
 package com.capco.communicator.view.page;
 
-import com.capco.communicator.repository.AccountRepository;
+import com.capco.communicator.repository.PaymentRepository;
 import com.capco.communicator.schema.Account;
+import com.capco.communicator.schema.Bank;
+import com.capco.communicator.schema.Payment;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.MethodProperty;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -18,13 +21,13 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 
 @UIScope
-@SpringView(name = AccountsView.VIEW_NAME)
-public class AccountsView extends Panel implements View{
+@SpringView(name = PaymentsView.VIEW_NAME)
+public class PaymentsView extends Panel implements View{
 
-    public static final String VIEW_NAME = "accounts";
+    public static final String VIEW_NAME = "payments";
 
     @Autowired
-    private AccountRepository repo;
+    private PaymentRepository repo;
 
     private Table table;
 
@@ -49,7 +52,7 @@ public class AccountsView extends Panel implements View{
         header.setSpacing(true);
         Responsive.makeResponsive(header);
 
-        Label titleLabel = new Label("Banks");
+        Label titleLabel = new Label("Payments");
         titleLabel.setSizeUndefined();
         titleLabel.addStyleName(ValoTheme.LABEL_H1);
         titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
@@ -68,6 +71,14 @@ public class AccountsView extends Panel implements View{
 
             @Override
             protected String formatPropertyValue(final Object rowId, final Object colId, final Property<?> property) {
+                if("bank".equals(colId)){
+                    return ((Bank)property.getValue()).getCode();
+                }
+
+                if("account".equals(colId)){
+                    return ((Account)property.getValue()).getCode();
+                }
+
                 return super.formatPropertyValue(rowId, colId, property);
             }
         };
@@ -80,35 +91,16 @@ public class AccountsView extends Panel implements View{
 
         table.setColumnCollapsingAllowed(true);
         table.setColumnReorderingAllowed(true);
-        table.setSortAscending(false);
 
-        listAccounts(null);
-        table.setVisibleColumns("id", "code", "login", "firstName", "lastName");
-        table.setColumnHeaders("id", "code", "login", "firstName", "lastName");
+        listPayments(null);
+        table.setVisibleColumns("id", "account", "bank" ,"credit", "debit");
+        table.setColumnHeaders("id", "account", "bank" ,"credit", "debit");
 
         table.setFooterVisible(true);
-//        table.setColumnFooter("time", "Total");
-
-//        table.addValueChangeListener(e -> {
-//            Account selected = (Account)e.getProperty().getValue();
-//            if (selected == null || selected.getId() == null) {
-//                editor.setVisible(false);
-//            }else {
-//                editor.editBank(selected);
-//            }
-//        });
-
         table.setImmediate(true);
         table.setFooterVisible(false);
 
-
-//        editor.setChangeHandler(() -> {
-//            editor.setVisible(false);
-//            listBanks(filter.getValue());
-//        });
-
-        listAccounts(null);
-
+        listPayments(null);
         VerticalLayout body = new VerticalLayout(table);
         body.setExpandRatio(table, 1);
         body.setStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -117,20 +109,20 @@ public class AccountsView extends Panel implements View{
 
     private Component buildSearch() {
         TextField filter = new TextField();
-        filter.setInputPrompt("Filter by login");
+        filter.setInputPrompt("Filter by ???");
         filter.setIcon(FontAwesome.SEARCH);
         filter.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
-        filter.addTextChangeListener(e -> listAccounts(e.getText()));
+        filter.addTextChangeListener(e -> listPayments(e.getText()));
         return filter;
     }
 
-    void listAccounts(String text) {
+    void listPayments(String text) {
         if (StringUtils.isEmpty(text)) {
-            table.setContainerDataSource(new BeanItemContainer(Account.class, repo.findAll()));
+            table.setContainerDataSource(new BeanItemContainer(Payment.class, repo.findAll()));
         } else {
-            table.setContainerDataSource(new BeanItemContainer(Account.class,
-                    repo.findByLoginStartsWithIgnoreCase(text)));
+//            table.setContainerDataSource(new BeanItemContainer(Account.class,
+//                    repo.findByLoginStartsWithIgnoreCase(text)));
         }
     }
 

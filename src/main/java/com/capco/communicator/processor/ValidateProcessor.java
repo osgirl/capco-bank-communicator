@@ -43,7 +43,7 @@ public class ValidateProcessor extends PaymentProcessor {
 
         } catch (SAXException | IOException e) {
             paymentContext.setState(State.VALIDATE_ERROR);
-//            paymentContext.setState(State.TRANSFORM_ERROR);
+            paymentContext.addErrorLog("Context validation failed. State: " + paymentContext.getState() + ", Error: " + e.getMessage());
 //            e.printStackTrace();
         }
 

@@ -9,6 +9,7 @@ public enum ViewType {
     DASHBOARD(DashboardView.VIEW_NAME, DashboardView.class, FontAwesome.HOME),
     BANKS(BanksView.VIEW_NAME, BanksView.class, FontAwesome.BAR_CHART_O),
     ACCOUNTS(AccountsView.VIEW_NAME, AccountsView.class, FontAwesome.TABLE),
+    PAYMENTS(PaymentsView.VIEW_NAME, PaymentsView.class, FontAwesome.CALCULATOR),
     PAYMENT_CONTEXT(PaymentContextsView.VIEW_NAME, PaymentContextsView.class, FontAwesome.FILE_TEXT_O);
 
     private final String viewName;

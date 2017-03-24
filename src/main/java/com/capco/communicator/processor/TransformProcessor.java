@@ -40,11 +40,13 @@ public class TransformProcessor extends PaymentProcessor {
 
         } catch (TransformerException | UnsupportedEncodingException e) {
             paymentContext.setState(State.TRANSFORM_ERROR);
+            paymentContext.addErrorLog("Context XSLT transformation failed. State: " + paymentContext.getState() + ", Error: " + e.getMessage());
 //            e.printStackTrace();
         }
 
         if(paymentContext.getPayload() == null || paymentContext.getPayload().length == 0){
             paymentContext.setState(State.TRANSFORM_ERROR);
+            paymentContext.addErrorLog("Context XSLT transformation failed. State: " + paymentContext.getState() + ", Error: no payload after XSLT transformation.");
         }
 
         paymentContextRepository.save(paymentContext);

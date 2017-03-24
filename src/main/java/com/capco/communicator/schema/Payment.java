@@ -19,6 +19,10 @@ public class Payment {
     @ManyToOne
     private Account account;
 
+    private long credit;
+
+    private long debit;
+
     public Long getId() {
         return id;
     }
@@ -43,4 +47,19 @@ public class Payment {
         this.account = account;
     }
 
+    public long getCredit() {
+        return credit;
+    }
+
+    public void setCredit(long credit) {
+        this.credit = credit;
+    }
+
+    public long getDebit() {
+        return debit;
+    }
+
+    public void setDebit(long debit) {
+        this.debit = debit;
+    }
 }

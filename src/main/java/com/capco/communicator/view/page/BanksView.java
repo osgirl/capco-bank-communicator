@@ -105,7 +105,6 @@ public class BanksView extends Panel implements View{
 
         table.setImmediate(true);
         table.setFooterVisible(false);
-        
 
         editor.setChangeHandler(() -> {
             editor.setVisible(false);
