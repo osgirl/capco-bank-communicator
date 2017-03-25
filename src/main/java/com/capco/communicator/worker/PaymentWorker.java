@@ -67,10 +67,12 @@ public class PaymentWorker extends AbstractWorker {
                 default:
                     continue;
             }
-            try {
-                processor.process(paymentContext);
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, e.toString());
+            if(processor != null){
+                try {
+                    processor.process(paymentContext);
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, e.toString());
+                }
             }
         }
     }

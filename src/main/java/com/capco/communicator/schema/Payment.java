@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-
 @Entity
 public class Payment {
 
@@ -22,6 +21,10 @@ public class Payment {
     private long credit;
 
     private long debit;
+
+    private String iban;
+
+    private String notice;
 
     public Long getId() {
         return id;
@@ -62,4 +65,21 @@ public class Payment {
     public void setDebit(long debit) {
         this.debit = debit;
     }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getNotice() {
+        return notice;
+    }
+
+    public void setNotice(String notice) {
+        this.notice = notice;
+    }
+
 }

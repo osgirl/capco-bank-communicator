@@ -1,7 +1,6 @@
 package com.capco.communicator.processor;
 
 import com.capco.communicator.schema.*;
-import org.h2.util.MathUtils;
 import org.h2.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.CharacterData;
@@ -24,6 +23,8 @@ public class CorrelateProcessor extends PaymentProcessor {
     private static final String ELEMENT_ACCOUNT_CODE = "account";
     private static final String ELEMENT_DEBIT = "debit";
     private static final String ELEMENT_CREDIT = "credit";
+    private static final String ELEMENT_IBAN = "iban";
+    private static final String ELEMENT_NOTICE = "notice";
 
     private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -31,7 +32,7 @@ public class CorrelateProcessor extends PaymentProcessor {
     @Override
     public void process(PaymentContext paymentContext) {
 
-        if(paymentContext.getPayload() == null || paymentContext.getPayload().length == 0){
+        if (paymentContext.getPayload() == null || paymentContext.getPayload().length == 0) {
             paymentContext.setState(State.CORRELATE_ERROR);
             paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
                     ", Error: missing payload in context.");
@@ -48,16 +49,18 @@ public class CorrelateProcessor extends PaymentProcessor {
             Document doc = db.parse(is);
 
             //Retrieve important elements
-            Element bankElement = (Element)doc.getElementsByTagName(ELEMENT_BANK_CODE).item(0);
-            Element accountElement = (Element)doc.getElementsByTagName(ELEMENT_ACCOUNT_CODE).item(0);
-            Element creditElement = (Element)doc.getElementsByTagName(ELEMENT_CREDIT).item(0);
-            Element debitElement = (Element)doc.getElementsByTagName(ELEMENT_DEBIT).item(0);
+            Element bankElement = (Element) doc.getElementsByTagName(ELEMENT_BANK_CODE).item(0);
+            Element accountElement = (Element) doc.getElementsByTagName(ELEMENT_ACCOUNT_CODE).item(0);
+            Element creditElement = (Element) doc.getElementsByTagName(ELEMENT_CREDIT).item(0);
+            Element debitElement = (Element) doc.getElementsByTagName(ELEMENT_DEBIT).item(0);
+            Element noticeElement = (Element) doc.getElementsByTagName(ELEMENT_NOTICE).item(0);
+            Element ibanElement = (Element) doc.getElementsByTagName(ELEMENT_IBAN).item(0);
 
             //Retrieve and validate bank and account code
             String bankCode = getCharacterDataFromElement(bankElement);
             String accountCode = getCharacterDataFromElement(accountElement);
 
-            if(bankCode == null || accountCode == null){
+            if (bankCode == null || accountCode == null) {
                 paymentContext.setState(State.CORRELATE_ERROR);
                 paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
                         ", Error: Missing bank or account codes. Bank code: " + bankCode + ", Account code: " + accountCode);
@@ -69,8 +72,8 @@ public class CorrelateProcessor extends PaymentProcessor {
             String creditStringForm = getCharacterDataFromElement(creditElement);
             String debitStringForm = getCharacterDataFromElement(debitElement);
 
-            if(creditStringForm == null || debitStringForm == null ||
-                    !StringUtils.isNumber(creditStringForm) || !StringUtils.isNumber(debitStringForm)){
+            if (creditStringForm == null || debitStringForm == null ||
+                    !StringUtils.isNumber(creditStringForm) || !StringUtils.isNumber(debitStringForm)) {
 
                 paymentContext.setState(State.CORRELATE_ERROR);
                 paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
@@ -84,7 +87,7 @@ public class CorrelateProcessor extends PaymentProcessor {
             Bank bank = bankRepository.findByCode(bankCode);
             Account account = accountRepository.findByCode(accountCode);
 
-            if(bank == null || account == null){
+            if (bank == null || account == null) {
                 paymentContext.setState(State.CORRELATE_ERROR);
                 paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
                         ", Error: No bank or account with specified codes in repository. Bank code: " + bankCode + ", Account code: " + accountCode);
@@ -92,23 +95,25 @@ public class CorrelateProcessor extends PaymentProcessor {
                 return;
             }
 
+            String iban = getCharacterDataFromElement(ibanElement);
+            String notice = getCharacterDataFromElement(noticeElement);
+
             //Create and persist new payment
             Payment payment = new Payment();
             payment.setBank(bank);
             payment.setAccount(account);
             payment.setCredit(Long.parseLong(creditStringForm));
             payment.setDebit(Long.parseLong(debitStringForm));
+            payment.setIban(iban);
+            payment.setIban(notice);
 
             paymentContext.setPayment(payment);
             paymentContext.setState(State.RULES);
-            paymentRepository.save(payment);
-            paymentContextRepository.save(paymentContext);
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             paymentContext.setState(State.CORRELATE_ERROR);
             paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
                     ", Error: " + e.getMessage());
-//            e.printStackTrace();
         }
 
         paymentContextRepository.save(paymentContext);
@@ -119,6 +124,9 @@ public class CorrelateProcessor extends PaymentProcessor {
     /*==============================*/
 
     private String getCharacterDataFromElement(Element e) {
+        if(e == null) {
+            return null;
+        }
         Node child = e.getFirstChild();
         if (child instanceof CharacterData) {
             CharacterData cd = (CharacterData) child;

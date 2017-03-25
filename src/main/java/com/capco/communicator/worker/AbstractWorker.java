@@ -7,8 +7,8 @@ public abstract class AbstractWorker {
 
     private static final Logger logger = Logger.getLogger(AbstractWorker.class.toString());
     private boolean stopProcessing = false;
-    private long stepInMilliseconds = 5000;
-    private long interval = 10000;
+    private long stepInMilliseconds = 2000;
+    private long interval = 5000;
 
     public void startJob() {
         while (!this.stopProcessing) {

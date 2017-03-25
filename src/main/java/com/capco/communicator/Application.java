@@ -26,9 +26,6 @@ public class Application {
     private static final Integer NUM_OF_GENERATED_PAYMENTS = 4;
     private static final Integer NUM_OF_GENERATED_PAYMENT_CONTEXTS = 1;
 
-    private static final String TEST_ACCOUNTS_CODE = "DE44-5001-0517-5407-3249-31";
-    private static final String TEST_BANK_CODE = "CRAFT_STAR404";
-
     @Autowired
     private FtpWorker ftpWorker;
 
@@ -74,10 +71,10 @@ public class Application {
     private static void initBanks() {
 
         // save a couple of banks
-        bankRepository.save(new Bank(TEST_BANK_CODE, "Star bank a.s."));
+        bankRepository.save(new Bank("CRAFT_STAR404", "Star bank a.s."));
         bankRepository.save(new Bank("FROZEN918", "Frozen official a.s"));
 
-        for(int i = 0; i < NUM_OF_GENERATED_BANKS; i++){
+        for (int i = 0; i < NUM_OF_GENERATED_BANKS; i++) {
             bankRepository.save(new Bank("BANK" + i + "_code", "Bank " + i + " a.s."));
         }
 
@@ -107,16 +104,17 @@ public class Application {
     }
 
     private static void initAccounts() {
-        accountRepository.save(new Account(TEST_ACCOUNTS_CODE, "test", "123456", "Anakin", "Skywalker"));
+        accountRepository.save(new Account("DE44-5001-0517-5407-3249-31", "anakin", "123456", "Anakin", "Skywalker"));
+        accountRepository.save(new Account("AU44-888-0517-5407-1111-22", "han", "solo", "Han", "Solo"));
 
-        for(int i = 0; i < NUM_OF_GENERATED_ACCOUNTS; i++){
+        for (int i = 0; i < NUM_OF_GENERATED_ACCOUNTS; i++) {
             accountRepository.save(new Account("Account_" + i + "_CODE", "Account_" + i + "_login", "123456",
                     "Account_" + i + "-firstName", "Account_" + i + "-lastName"));
         }
     }
 
-    private static void initPaymentContexts(){
-        for(int i = 0; i < NUM_OF_GENERATED_PAYMENT_CONTEXTS; i++){
+    private static void initPaymentContexts() {
+        for (int i = 0; i < NUM_OF_GENERATED_PAYMENT_CONTEXTS; i++) {
             PaymentContext paymentContext = new PaymentContext();
             paymentContext.setResource("Context_" + i + "_resource");
             paymentContext.setState(State.VALIDATE);
@@ -124,8 +122,8 @@ public class Application {
             paymentContext.setChannel("Context_" + i + "-channel");
 
             Payment payment = new Payment();
-            payment.setBank(bankRepository.findByCode(TEST_BANK_CODE));
-            payment.setAccount(accountRepository.findByCode(TEST_ACCOUNTS_CODE));
+            payment.setBank(bankRepository.findByCode("CRAFT_STAR404"));
+            payment.setAccount(accountRepository.findByCode("DE44-5001-0517-5407-3249-31"));
             payment.setCredit(126);
             payment.setDebit(0);
 
@@ -135,13 +133,13 @@ public class Application {
         }
     }
 
-    private static void initPayments(){
+    private static void initPayments() {
 
-        for(int i = 0; i < NUM_OF_GENERATED_PAYMENTS; i++){
+        for (int i = 0; i < NUM_OF_GENERATED_PAYMENTS; i++) {
             Payment payment = new Payment();
-            payment.setBank(bankRepository.findByCode(TEST_BANK_CODE));
-            payment.setAccount(accountRepository.findByCode(TEST_ACCOUNTS_CODE));
-            payment.setCredit(10*(i+1));
+            payment.setBank(bankRepository.findByCode("CRAFT_STAR404"));
+            payment.setAccount(accountRepository.findByCode("DE44-5001-0517-5407-3249-31"));
+            payment.setCredit(10 * (i + 1));
             payment.setDebit((i + 3));
 
             paymentRepository.save(payment);

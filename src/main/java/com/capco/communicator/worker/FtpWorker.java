@@ -1,5 +1,6 @@
 package com.capco.communicator.worker;
 
+import com.capco.communicator.PaymentFormat;
 import com.capco.communicator.repository.PaymentContextRepository;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
@@ -30,20 +31,29 @@ public class FtpWorker extends AbstractWorker {
     private PaymentContextRepository paymentContextRepository;
 
     protected void performJob() {
-        File paymentADir = new File(getFtpDirPath() + File.separator + "paymentA");
-        if (paymentADir.exists()) {
-            for (File paymentAFile : paymentADir.listFiles()) {
-                PaymentContext paymentContext = createAndGetPaymentContext(paymentAFile);
-                paymentContextRepository.save(paymentContext);
-                paymentAFile.delete();
-            }
+        File payment01Dir = new File(getFtpDirPath() + File.separator + "payment.001.001.001");
+        if (payment01Dir.exists()) {
+            createContexts(payment01Dir, PaymentFormat.PAIN_01);
+        }
+        File payment02Dir = new File(getFtpDirPath() + File.separator + "payment.001.001.002");
+        if (payment02Dir.exists()) {
+            createContexts(payment02Dir, PaymentFormat.PAIN_02);
         }
     }
 
-    private PaymentContext createAndGetPaymentContext(File paymentFile) {
+    private void createContexts(File paymentDir, PaymentFormat paymentFormat) {
+        for (File paymentFile : paymentDir.listFiles()) {
+            PaymentContext paymentContext = createAndGetPaymentContext(paymentFile, paymentFormat);
+            paymentContextRepository.save(paymentContext);
+            paymentFile.delete();
+        }
+    }
+
+    private PaymentContext createAndGetPaymentContext(File paymentFile, PaymentFormat paymentFormat) {
         PaymentContext paymentContext = new PaymentContext();
         paymentContext.setCreatedAt(new Date());
         paymentContext.setState(State.DECODE);
+        paymentContext.setPaymentFormat(paymentFormat);
         try {
             paymentContext.setResource(IOUtils.toString(new FileInputStream(paymentFile)));
         } catch (IOException e) {

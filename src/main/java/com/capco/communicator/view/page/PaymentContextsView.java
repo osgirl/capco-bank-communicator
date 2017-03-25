@@ -92,13 +92,11 @@ public class PaymentContextsView extends Panel implements View {
         listPaymentContexts();
         table.setVisibleColumns(
                 PaymentContext.F_ID,
-                PaymentContext.F_STATE,
                 PaymentContext.F_CREATED_AT,
                 PaymentContext.F_CHANNEL);
 
         table.setColumnHeaders(
                 PaymentContext.F_ID,
-                PaymentContext.F_STATE,
                 PaymentContext.F_CREATED_AT,
                 PaymentContext.F_CHANNEL);
 
@@ -144,7 +142,7 @@ public class PaymentContextsView extends Panel implements View {
         paymentDetailContentLayout.setMargin(true);
         paymentDetailContentLayout.setSpacing(true);
 
-        Label title = new Label("Payment ID' " + paymentContext.getPayment().getId() + "' detial:");
+        Label title = new Label("Payment ID' " + paymentContext.getPayment().getId() + "' detail:");
         title.addStyleName(ValoTheme.LABEL_H3);
         title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
         title.addStyleName(ValoTheme.LABEL_BOLD);

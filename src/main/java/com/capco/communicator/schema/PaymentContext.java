@@ -1,25 +1,24 @@
 package com.capco.communicator.schema;
 
+import com.capco.communicator.PaymentFormat;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
-public class PaymentContext extends AbstractProcessingContext{
+public class PaymentContext extends AbstractProcessingContext {
 
-    public static final String F_ID =         "id";
-    public static final String F_RESOURCE =   "resource";
-    public static final String F_PAYLOAD =    "payload";
-    public static final String F_STATE =      "state";
+    public static final String F_ID = "id";
+    public static final String F_RESOURCE = "resource";
+    public static final String F_PAYLOAD = "payload";
+    public static final String F_STATE = "state";
     public static final String F_CREATED_AT = "createdAt";
-    public static final String F_PAYMENT =    "payment";
-    public static final String F_CHANNEL =    "channel";
+    public static final String F_PAYMENT = "payment";
+    public static final String F_CHANNEL = "channel";
+    public static final String F_PAYMENT_FORMAT = "paymentFormat";
 
     public PaymentContext() {
     }
@@ -40,8 +39,10 @@ public class PaymentContext extends AbstractProcessingContext{
     @GeneratedValue
     private Long id;
 
+    @Column( length = 1000 )
     private String resource;
 
+    @Column( length = 1000 )
     private byte[] payload;
 
     private State state;
@@ -49,10 +50,13 @@ public class PaymentContext extends AbstractProcessingContext{
     private Date createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "payment_id")
     @Cascade(CascadeType.ALL)
     private Payment payment;
 
     private String channel;
+
+    private PaymentFormat paymentFormat;
 
     public Long getId() {
         return id;
@@ -109,4 +113,13 @@ public class PaymentContext extends AbstractProcessingContext{
     public void setPayload(byte[] payload) {
         this.payload = payload;
     }
+
+    public PaymentFormat getPaymentFormat() {
+        return paymentFormat;
+    }
+
+    public void setPaymentFormat(PaymentFormat paymentFormat) {
+        this.paymentFormat = paymentFormat;
+    }
+
 }
