@@ -100,7 +100,6 @@ public class PaymentsView extends Panel implements View{
         table.setImmediate(true);
         table.setFooterVisible(false);
 
-        listPayments(null);
         VerticalLayout body = new VerticalLayout(table);
         body.setExpandRatio(table, 1);
         body.setStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -120,14 +119,11 @@ public class PaymentsView extends Panel implements View{
     void listPayments(String text) {
         if (StringUtils.isEmpty(text)) {
             table.setContainerDataSource(new BeanItemContainer(Payment.class, repo.findAll()));
-        } else {
-//            table.setContainerDataSource(new BeanItemContainer(Account.class,
-//                    repo.findByLoginStartsWithIgnoreCase(text)));
         }
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        listPayments(null);
     }
 }

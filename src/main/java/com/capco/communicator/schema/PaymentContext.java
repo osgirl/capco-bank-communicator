@@ -50,7 +50,6 @@ public class PaymentContext extends AbstractProcessingContext {
     private Date createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "payment_id")
     @Cascade(CascadeType.ALL)
     private Payment payment;
 

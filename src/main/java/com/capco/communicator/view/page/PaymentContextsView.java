@@ -90,6 +90,7 @@ public class PaymentContextsView extends Panel implements View {
         table.setSortAscending(false);
 
         listPaymentContexts();
+
         table.setVisibleColumns(
                 PaymentContext.F_ID,
                 PaymentContext.F_CREATED_AT,
@@ -152,6 +153,8 @@ public class PaymentContextsView extends Panel implements View {
         paymentDetailContentLayout.addComponent(new Label("Account code: " + paymentContext.getPayment().getAccount().getCode()));
         paymentDetailContentLayout.addComponent(new Label("Credit: " + paymentContext.getPayment().getCredit()));
         paymentDetailContentLayout.addComponent(new Label("Debit:  " + paymentContext.getPayment().getDebit()));
+        paymentDetailContentLayout.addComponent(new Label("Iban:  " + paymentContext.getPayment().getIban()));
+        paymentDetailContentLayout.addComponent(new Label("Notice:  " + paymentContext.getPayment().getNotice()));
 
         if (paymentDetailWindow == null) {
             paymentDetailWindow = new Window();
@@ -161,8 +164,8 @@ public class PaymentContextsView extends Panel implements View {
             paymentDetailWindow.setResizable(true);
             paymentDetailWindow.setDraggable(false);
             paymentDetailWindow.setCloseShortcut(ShortcutAction.KeyCode.ESCAPE, null);
-            paymentDetailWindow.setContent(paymentDetailContentLayout);
         }
+        paymentDetailWindow.setContent(paymentDetailContentLayout);
 
         if (!paymentDetailWindow.isAttached()) {
             paymentDetailWindow.setPositionY(event.getClientY() - event.getRelativeY() + 40);
