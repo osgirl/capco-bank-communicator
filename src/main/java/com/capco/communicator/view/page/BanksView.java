@@ -125,7 +125,7 @@ public class BanksView extends Panel implements View{
 
             @Override
             public void buttonClick(final Button.ClickEvent event) {
-                editor.editBank(new Bank("", ""));
+                editor.editBank(new Bank("", "", ""));
             }
         });
         addNewBank.setEnabled(true);
