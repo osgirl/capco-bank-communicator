@@ -43,5 +43,4 @@ public class DispatchProcessor extends PaymentProcessor {
                 + outputChannel
                 + File.separator + UUID.randomUUID().toString() + ".xml";
     }
-
 }

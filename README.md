@@ -1,18 +1,17 @@
-# capco-bank-communicator
 
-1.implement ValidateProcessor
+1. Implement ValidateProcessor:
+    Validate resource in process context against valid xsd schema depending on paymentFormat<br>
+    a) Load the schema<br>
+    b) Create Source from XML String<br>
+    c) Validate the XML against the schema<br>
+    Note: check also PaymentUtil.java for schema location
 
-Validate resource in process context against valid xsd schema depending on paymentFormat
-a) Load the schema
-b) Create Source from XML String
-c) Validate the XML against the schema
-Note: check also PaymentUtil.java for schema location
+    If validation is successful set state to TRANSFORM, if not to VALIDATE_ERROR
 
-If validation is successful set state to TRANSFORM, if not to VALIDATE_ERROR
-
-2. create xslt schema for payment.001.001.99.xml
- - pridal som confirmation (boolean) a reference string (dufam ze boolean nebdue problem pre nich)
+2. create xslt schema for payment.001.001.99.xml and
+    use it in TransformProcessor
  
-3. Implement findAccount() and findBank() methods in CorrelateProcessor
+3. Implement findBank() methods in CorrelateProcessor<br> 
+    (Tip: find inspiration in the process of locating account code)
 
-4. implement sending payment to MQ
+4. implement sending payment to MQ (use JmsService component)

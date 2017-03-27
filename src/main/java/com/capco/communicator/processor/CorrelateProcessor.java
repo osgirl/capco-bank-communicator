@@ -49,7 +49,6 @@ public class CorrelateProcessor extends PaymentProcessor {
             Document doc = db.parse(is);
 
             //Retrieve important elements
-            Element bankElement = (Element) doc.getElementsByTagName(ELEMENT_BANK_CODE).item(0);
             Element accountElement = (Element) doc.getElementsByTagName(ELEMENT_ACCOUNT_CODE).item(0);
             Element creditElement = (Element) doc.getElementsByTagName(ELEMENT_CREDIT).item(0);
             Element debitElement = (Element) doc.getElementsByTagName(ELEMENT_DEBIT).item(0);
@@ -57,13 +56,12 @@ public class CorrelateProcessor extends PaymentProcessor {
             Element ibanElement = (Element) doc.getElementsByTagName(ELEMENT_IBAN).item(0);
 
             //Retrieve and validate bank and account code
-            String bankCode = getCharacterDataFromElement(bankElement);
             String accountCode = getCharacterDataFromElement(accountElement);
 
-            if (bankCode == null || accountCode == null) {
+            if (accountCode == null) {
                 paymentContext.setState(State.CORRELATE_ERROR);
                 paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
-                        ", Error: Missing bank or account codes. Bank code: " + bankCode + ", Account code: " + accountCode);
+                        ", Error: Missing account code.");
                 paymentContextRepository.save(paymentContext);
                 return;
             }
@@ -84,13 +82,13 @@ public class CorrelateProcessor extends PaymentProcessor {
             }
 
             //Retrieve band and account from the repository
-            Bank bank = bankRepository.findByCode(bankCode);
+            Bank bank = findBank(doc, paymentContext);
             Account account = accountRepository.findByCode(accountCode);
 
             if (bank == null || account == null) {
                 paymentContext.setState(State.CORRELATE_ERROR);
                 paymentContext.addErrorLog("Context correlation failed. State: " + paymentContext.getState() +
-                        ", Error: No bank or account with specified codes in repository. Bank code: " + bankCode + ", Account code: " + accountCode);
+                        ", Error: No bank or account with specified codes in repository.");
                 paymentContextRepository.save(paymentContext);
                 return;
             }
@@ -119,10 +117,16 @@ public class CorrelateProcessor extends PaymentProcessor {
         paymentContextRepository.save(paymentContext);
     }
 
+    private Bank findBank(Document doc, PaymentContext paymentContext){
+        //TODO - implement this method - use similar approach as used in finding account code
+
+        return null;
+    }
+
+
     /*==============================*/
     /*        Helper methods        */
     /*==============================*/
-
     private String getCharacterDataFromElement(Element e) {
         if(e == null) {
             return null;
