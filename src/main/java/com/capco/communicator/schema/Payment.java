@@ -28,6 +28,10 @@ public class Payment {
 
     private String notice;
 
+    private boolean confirmation;
+
+    private String reference;
+
     public Long getId() {
         return id;
     }
@@ -82,6 +86,22 @@ public class Payment {
 
     public void setNotice(String notice) {
         this.notice = notice;
+    }
+
+    public boolean isConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(boolean confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
 }
