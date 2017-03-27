@@ -16,6 +16,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 
+/**
+ * CorrelateProcessor receives a paymentContext and performs
+ * correlation of the payment. This means that we need to find the banks
+ * and the accounts on which the payment was performed. If this process
+ * is successful, next step (Rules) can be initiated
+ * */
 @Service
 public class CorrelateProcessor extends PaymentProcessor {
 

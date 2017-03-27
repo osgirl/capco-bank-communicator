@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple authentication service implementation. For the
+ * purposes of this application, in-memory storage about
+ * authenticated users is used.
+ * */
 @SpringComponent
 @UIScope
 public class AuthServiceImpl implements AuthService{

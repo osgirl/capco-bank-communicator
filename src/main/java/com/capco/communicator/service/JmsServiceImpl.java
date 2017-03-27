@@ -6,6 +6,9 @@ import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.Queue;
 
+/**
+ * Simple JmsService implementation with capability of sending messages
+ * */
 @SpringComponent
 public class JmsServiceImpl implements JmsService{
 

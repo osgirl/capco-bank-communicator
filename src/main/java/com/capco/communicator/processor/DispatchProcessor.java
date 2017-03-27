@@ -12,9 +12,15 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+/**
+ * DispatchProcessor receives a paymentContext and performs
+ * a dispatch process on the payment. This means that the payment
+ * is send for further processing (storage, archivation etc.) into
+ * some other system (Ftp, JMS queue etc.). If this process
+ * is successful, the payment processing is DONE.
+ * */
 @Service
 public class DispatchProcessor extends PaymentProcessor {
-
 
     @Override
     public void process(PaymentContext paymentContext) {
@@ -43,5 +49,4 @@ public class DispatchProcessor extends PaymentProcessor {
                 + outputChannel
                 + File.separator + UUID.randomUUID().toString() + ".xml";
     }
-
 }
