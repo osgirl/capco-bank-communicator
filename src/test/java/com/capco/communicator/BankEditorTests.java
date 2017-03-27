@@ -20,6 +20,7 @@ public class BankEditorTests {
 
     private static final String BANK_CODE = "BANK_CODE";
     private static final String BANK_NAME = "BANK_NAME";
+    private static final String BANK_CHANNEL = "BANK_CHANNEL";
 
     @Mock
     com.capco.communicator.repository.BankRepository BankRepository;
@@ -49,7 +50,7 @@ public class BankEditorTests {
     }
 
     private void BankDataWasFilled() {
-        this.editor.editBank(new Bank(BANK_CODE, BANK_NAME));
+        this.editor.editBank(new Bank(BANK_CODE, BANK_NAME, BANK_CHANNEL));
     }
 
     private TypeSafeMatcher<Bank> BankMatchesEditorFields() {

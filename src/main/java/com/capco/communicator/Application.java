@@ -15,7 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
-import java.util.Random;
 
 @SpringBootApplication
 public class Application {
@@ -69,12 +68,12 @@ public class Application {
 
     private static void initBanks() {
         // save a couple of banks
-        bankRepository.save(new Bank("CRAFT_STAR404", "Star bank a.s."));
-        bankRepository.save(new Bank("FROZEN918", "Frozen official a.s"));
-        bankRepository.save(new Bank("HISTORY_BANK", "History bank"));
+        bankRepository.save(new Bank("CRAFT_STAR404", "Star bank a.s.", "ftpBankCZ"));
+        bankRepository.save(new Bank("FROZEN918", "Frozen official a.s", "ftpBankCZ"));
+        bankRepository.save(new Bank("HISTORY_BANK", "History bank", "HISTORY_WEBSERVICE"));
         // generate some banks
         for (int i = 0; i < NUM_OF_GENERATED_BANKS; i++) {
-            bankRepository.save(new Bank("BANK" + i + "_code", "Bank " + i + " a.s."));
+            bankRepository.save(new Bank("BANK" + i + "_code", "Bank " + i + " a.s.", "MQ_TEST"));
         }
     }
 

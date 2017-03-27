@@ -1,6 +1,7 @@
 package com.capco.communicator.worker;
 
 import com.capco.communicator.PaymentFormat;
+import com.capco.communicator.PaymentUtil;
 import com.capco.communicator.repository.PaymentContextRepository;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +30,11 @@ public class FtpWorker extends AbstractWorker {
     private PaymentContextRepository paymentContextRepository;
 
     protected void performJob() {
-        File payment01Dir = new File(getFtpDirPath() + File.separator + "payment.001.001.001");
+        File payment01Dir = new File(PaymentUtil.getFtpDirPath() + File.separator + "payment.001.001.001");
         if (payment01Dir.exists()) {
             createContexts(payment01Dir, PaymentFormat.PAIN_01);
         }
-        File payment02Dir = new File(getFtpDirPath() + File.separator + "payment.001.001.002");
+        File payment02Dir = new File(PaymentUtil.getFtpDirPath() + File.separator + "payment.001.001.002");
         if (payment02Dir.exists()) {
             createContexts(payment02Dir, PaymentFormat.PAIN_02);
         }
@@ -61,13 +60,6 @@ public class FtpWorker extends AbstractWorker {
         }
 
         return paymentContext;
-    }
-
-    private static String getFtpDirPath() {
-        Path projectRelativePath = Paths.get("");
-        File ftpDir = new File(projectRelativePath.toAbsolutePath().toString() + File.separator + "ftp");
-
-        return ftpDir.getPath();
     }
 
 }

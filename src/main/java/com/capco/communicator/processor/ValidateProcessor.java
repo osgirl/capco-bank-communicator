@@ -20,29 +20,43 @@ import java.io.StringReader;
 @Service
 public class ValidateProcessor extends PaymentProcessor {
 
-    private SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    private SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
     @Override
     public void process(PaymentContext paymentContext) {
 
         try {
-            //Load the schema
-            Schema schema = factory.newSchema(new File(PaymentUtil.getSchemaLocation(paymentContext.getPaymentFormat())));
+            executeSchemaValidation(paymentContext);
+            executeSchematronValidation(paymentContext);
 
-            //Create Source from XML String
-            Source xmlSource = new StreamSource(new StringReader(paymentContext.getResource()));
-
-            //Validate the XML against the schema
-            Validator validator = schema.newValidator();
-            validator.validate(xmlSource);
             paymentContext.setState(State.TRANSFORM);
 
-        } catch (PaymentProcessingException | SAXException | IOException e) {
+        } catch (PaymentProcessingException | IOException | SAXException e) {
+
             paymentContext.setState(State.VALIDATE_ERROR);
             paymentContext.addErrorLog("Context validation failed. State: " + paymentContext.getState() + ", Error: " + e.getMessage());
         }
 
         paymentContextRepository.save(paymentContext);
+    }
+
+    private void executeSchemaValidation(PaymentContext paymentContext) throws PaymentProcessingException, SAXException, IOException {
+
+        String schemaLocation = PaymentUtil.getSchemaLocation(paymentContext.getPaymentFormat());
+
+        // Load the schema
+        Schema schema = schemaFactory.newSchema(new File(schemaLocation));
+
+        //Create Source from XML String
+        Source xmlSource = new StreamSource(new StringReader(paymentContext.getResource()));
+
+        //Validate the XML against the schema
+        Validator validator = schema.newValidator();
+        validator.validate(xmlSource);
+
+    }
+
+    private void executeSchematronValidation(PaymentContext paymentContext) {
     }
 
 }

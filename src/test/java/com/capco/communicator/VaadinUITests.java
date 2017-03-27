@@ -84,7 +84,7 @@ public class VaadinUITests {
     private void BankDataWasFilled(BankEditor editor, String firstName, String lastName) {
         this.editor.code.setValue(firstName);
         this.editor.name.setValue(lastName);
-        editor.editBank(new Bank(firstName, lastName));
+        editor.editBank(new Bank(firstName, lastName, "empty"));
     }
 
     @Configuration
@@ -95,11 +95,11 @@ public class VaadinUITests {
 
         @PostConstruct
         public void initializeData() {
-            this.repository.save(new Bank("Jack", "Bauer"));
-            this.repository.save(new Bank("Chloe", "O'Brian"));
-            this.repository.save(new Bank("Kim", "Bauer"));
-            this.repository.save(new Bank("David", "Palmer"));
-            this.repository.save(new Bank("Michelle", "Dessler"));
+            this.repository.save(new Bank("Jack", "Bauer", "channel"));
+            this.repository.save(new Bank("Chloe", "O'Brian", "channel"));
+            this.repository.save(new Bank("Kim", "Bauer", "channel"));
+            this.repository.save(new Bank("David", "Palmer", "channel"));
+            this.repository.save(new Bank("Michelle", "Dessler", "channel"));
         }
 
     }

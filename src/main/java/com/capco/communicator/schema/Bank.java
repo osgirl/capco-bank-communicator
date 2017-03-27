@@ -7,45 +7,57 @@ import javax.persistence.Id;
 @Entity
 public class Bank {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-	private String code;
+    private String code;
 
-	private String name;
+    private String name;
 
-	protected Bank() {}
+    private String outputChannel;
 
-	public Bank(String code, String name) {
-		this.code = code;
-		this.name = name;
-	}
+    protected Bank() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Bank(String code, String name, String outputChannel) {
+        this.code = code;
+        this.name = name;
+        this.outputChannel = outputChannel;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("Customer[id=%d, code='%s', name='%s']", id,
-				code, name);
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOutputChannel() {
+        return outputChannel;
+    }
+
+    public void setOutputChannel(String outputChannel) {
+        this.outputChannel = outputChannel;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Customer[id=%d, code='%s', name='%s']", id,
+                code, name);
+    }
 
 }
