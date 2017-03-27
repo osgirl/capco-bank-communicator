@@ -17,6 +17,12 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * TransformProcessor receives a paymentContext and performs
+ * transformation of the initial XML message to target XML format.
+ * This is performed using correct XSLT transformation. If the process is
+ * successful, next step (Duplicate check) can be initiated
+ * */
 @Service
 public class TransformProcessor extends PaymentProcessor {
 

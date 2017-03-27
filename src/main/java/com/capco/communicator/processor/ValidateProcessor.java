@@ -17,6 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
+/**
+ * ValidateProcessor receives a paymentContext and performs
+ * validation of the XML message against correct XSD schema. If the process is
+ * successful, next step (Transformation) can be initiated
+ * */
 @Service
 public class ValidateProcessor extends PaymentProcessor {
 
