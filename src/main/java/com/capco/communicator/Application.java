@@ -70,6 +70,7 @@ public class Application {
         // save a couple of banks
         bankRepository.save(new Bank("CRAFT_STAR404", "Star bank a.s.", "ftpBankCZ"));
         bankRepository.save(new Bank("FROZEN918", "Frozen official a.s", "ftpBankCZ"));
+        bankRepository.save(new Bank("STUDENT_BANK", "Frozen official a.s", "MQ"));
         bankRepository.save(new Bank("HISTORY_BANK", "History bank", "HISTORY_WEBSERVICE"));
         // generate some banks
         for (int i = 0; i < NUM_OF_GENERATED_BANKS; i++) {
