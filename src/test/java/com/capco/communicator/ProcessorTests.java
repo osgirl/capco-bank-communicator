@@ -5,6 +5,7 @@ import com.capco.communicator.processor.TransformProcessor;
 import com.capco.communicator.processor.ValidateProcessor;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
+import com.capco.communicator.service.JmsService;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
