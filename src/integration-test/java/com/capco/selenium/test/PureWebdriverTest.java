@@ -8,13 +8,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Created by SBRJ on 27. 3. 2017.
  */
 public class PureWebdriverTest {
 
     @Test
-    public void googlePageTest(){
+    public void googlePageTest() throws IOException {
+        System.setProperty("webdriver.chrome.driver",
+                new File(".").getCanonicalPath() + "\\src\\drivers\\chromedriver.exe");
         WebDriver webDriver = new ChromeDriver();
         webDriver.get("http://www.google.com");
         WebElement searchWebElement = webDriver.findElement(By.name("q"));

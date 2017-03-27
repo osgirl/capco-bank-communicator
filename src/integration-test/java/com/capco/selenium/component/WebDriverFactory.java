@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,6 +29,13 @@ public class WebDriverFactory {
     }
 
     private static WebDriver createWebDriverByBrowserType(BrowserType browserType) throws RuntimeException {
+        try {
+            System.setProperty("webdriver.chrome.driver",
+                    new File(".").getCanonicalPath() + "\\src\\drivers\\chromedriver.exe");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Chromedriver not found on path");
+        }
         switch (browserType){
             case Firefox: return new FirefoxDriver();
             case Chrome: return new ChromeDriver();
