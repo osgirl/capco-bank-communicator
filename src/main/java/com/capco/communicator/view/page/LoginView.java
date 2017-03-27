@@ -50,22 +50,25 @@ public class LoginView extends VerticalLayout implements View{
         fields.addStyleName("fields");
 
         final TextField username = new TextField("Login");
+        username.setId("usernameinput");
         username.setIcon(FontAwesome.USER);
         username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
         final PasswordField password = new PasswordField("Password");
+        password.setId("passwordinput");
         password.setIcon(FontAwesome.LOCK);
         password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
-        final Button signin = new Button("Sign In");
-        signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        signin.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        signin.focus();
+        final Button signIn = new Button("Sign In");
+        signIn.setId("loginbutton");
+        signIn.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        signIn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        signIn.focus();
 
-        fields.addComponents(username, password, signin);
-        fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
+        fields.addComponents(username, password, signIn);
+        fields.setComponentAlignment(signIn, Alignment.BOTTOM_LEFT);
 
-        signin.addClickListener(new Button.ClickListener() {
+        signIn.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 if(authService.authenticate(username.getValue(), password.getValue())){
