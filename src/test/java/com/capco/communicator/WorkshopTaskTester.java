@@ -38,7 +38,7 @@ public class WorkshopTaskTester {
     private String payment =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<Document>\n" +
-                    "    <pain.001.001.01>\n" +
+                    "    <pain.001.001.99>\n" +
                     "        <bank>STUDENT_BANK</bank>\n" +
                     "        <account>DE44-5001-0517-5407-3249-31</account>\n" +
                     "        <confirmation>true</confirmation>\n" +
@@ -46,7 +46,7 @@ public class WorkshopTaskTester {
                     "        <credit>777</credit>\n" +
                     "        <reference>PN_707</reference>\n" +
                     "        <note>OldFieldNotice</note>\n" +
-                    "    </pain.001.001.01>\n" +
+                    "    </pain.001.001.99>\n" +
                     "</Document>";
 
     @Test
