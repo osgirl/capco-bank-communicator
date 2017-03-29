@@ -22,7 +22,7 @@ Exercises for workshop:
    Hint: use PaymentContext.channel attribute with value "mq"
    
    
-   
+   -----------------------------------------------------------------------------------------------------
    
    
    Win env for workshop is available here: https://drive.google.com/open?id=0B3AWLqDRDe5rX0I5U1V1Y1hUYlk
