@@ -104,4 +104,18 @@ public class Payment {
         this.reference = reference;
     }
 
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", bank=" + bank +
+                ", account=" + account +
+                ", credit=" + credit +
+                ", debit=" + debit +
+                ", iban='" + iban + '\'' +
+                ", notice='" + notice + '\'' +
+                ", confirmation=" + confirmation +
+                ", reference='" + reference + '\'' +
+                '}';
+    }
 }

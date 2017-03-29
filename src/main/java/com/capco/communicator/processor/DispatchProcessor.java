@@ -3,6 +3,8 @@ package com.capco.communicator.processor;
 import com.capco.communicator.schema.Payment;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
+import com.capco.communicator.service.JmsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBContext;

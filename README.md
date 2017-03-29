@@ -14,4 +14,5 @@
 
     If validation is successful set state to TRANSFORM, if not to VALIDATE_ERROR
     
-4. implement sending payment to MQ (use JmsService component)
+4. implement sending payment to MQ (use JmsService component)<br>
+   Hint: use PaymentContext.channel attribute with value "mq"

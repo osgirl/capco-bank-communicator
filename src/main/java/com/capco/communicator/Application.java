@@ -32,6 +32,8 @@ import java.util.Date;
 @EnableJms
 public class Application {
 
+    public static final String JMS_QUEUE_NAME = "bank-communicator-queue";
+
     private static final Integer NUM_OF_GENERATED_BANKS = 4;
     private static final Integer NUM_OF_GENERATED_ACCOUNTS = 4;
     private static final Integer NUM_OF_GENERATED_PAYMENTS = 4;
@@ -73,7 +75,7 @@ public class Application {
 
     @Bean
     public Queue queue() {
-        return new ActiveMQQueue("bank-communicator-queue");
+        return new ActiveMQQueue(JMS_QUEUE_NAME);
     }
 
     private void initWorkers() {
