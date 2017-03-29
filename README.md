@@ -1,4 +1,8 @@
 
+capco-bank-communicator connects, translates and normalizes any kind of data. The business agility layer that bridges the gap between business and IT. 
+
+Exercises for workshop:
+
 1. create xslt schema for payment.001.001.99.xml and
     use it in TransformProcessor
  
@@ -16,3 +20,9 @@
     
 4. implement sending payment to MQ (use JmsService component)<br>
    Hint: use PaymentContext.channel attribute with value "mq"
+   
+   
+   
+   
+   
+   Win env for workshop is available here: https://drive.google.com/open?id=0B3AWLqDRDe5rX0I5U1V1Y1hUYlk
