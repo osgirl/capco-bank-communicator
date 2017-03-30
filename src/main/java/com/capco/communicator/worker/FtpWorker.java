@@ -57,10 +57,7 @@ public class FtpWorker extends AbstractWorker {
             if(!processedFiles.contains(fileAbsolutePath)){
                 PaymentContext paymentContext = createAndGetPaymentContext(paymentFile, paymentFormat);
                 paymentContextRepository.save(paymentContext);
-
-                if(!paymentFile.delete()){
-                    processedFiles.add(fileAbsolutePath);
-                }
+                processedFiles.add(fileAbsolutePath);
             }
         }
     }
