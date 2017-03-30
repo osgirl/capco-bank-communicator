@@ -79,6 +79,7 @@ public class WorkshopTaskTester {
         Assert.assertTrue(context.getPayload().length != 0);
 
         String transformedPayload = new String(context.getPayload(), TransformProcessor.DEFAULT_CHAR_ENCODING);
+        Assert.assertTrue(transformedPayload.contains("pain.001.001.99"));
     }
 
     @Test
