@@ -124,11 +124,15 @@ public class CorrelateProcessor extends PaymentProcessor {
     }
 
     private Bank findBank(Document doc, PaymentContext paymentContext){
-        //TODO - implement this method - use similar approach as used in finding account code
+        Element bankElement = (Element) doc.getElementsByTagName(ELEMENT_BANK_CODE).item(0);
+        String bankCode = getCharacterDataFromElement(bankElement);
 
-        return null;
+        if (bankCode == null) {
+            return null;
+        }
+
+        return bankRepository.findByCode(bankCode);
     }
-
 
     /*==============================*/
     /*        Helper methods        */

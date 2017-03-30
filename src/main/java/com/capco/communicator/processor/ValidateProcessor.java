@@ -32,7 +32,7 @@ public class ValidateProcessor extends PaymentProcessor {
 
         try {
             executeSchemaValidation(paymentContext);
-            paymentContext.setState(State.VALIDATE_ERROR);
+            paymentContext.setState(State.TRANSFORM);
 
         } catch (PaymentProcessingException | IOException | SAXException e) {
 
@@ -48,5 +48,17 @@ public class ValidateProcessor extends PaymentProcessor {
         // a) Load the schema (use Schema instance)
         // b) Create Source from XML String (use StreamSource instance)
         // c) Validate the XML against the schema Note: check also PaymentUtil.java for schema location (use Validator)
+
+        String schemaLocation = PaymentUtil.getSchemaLocation(paymentContext.getPaymentFormat());
+
+        // Load the schema
+        Schema schema = schemaFactory.newSchema(new File(schemaLocation));
+
+        //Create Source from XML String
+        Source xmlSource = new StreamSource(new StringReader(paymentContext.getResource()));
+
+        //Validate the XML against the schema
+        Validator validator = schema.newValidator();
+        validator.validate(xmlSource);
     }
 }

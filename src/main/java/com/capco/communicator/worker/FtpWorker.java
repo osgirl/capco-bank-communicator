@@ -66,7 +66,7 @@ public class FtpWorker extends AbstractWorker {
     private PaymentContext createAndGetPaymentContext(File paymentFile, PaymentFormat paymentFormat) {
         PaymentContext paymentContext = new PaymentContext();
         paymentContext.setCreatedAt(new Date());
-        paymentContext.setChannel(Channel.FTP);
+        paymentContext.setChannel(Channel.MQ);
         paymentContext.setState(State.DECODE);
         paymentContext.setPaymentFormat(paymentFormat);
 

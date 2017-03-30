@@ -25,6 +25,9 @@ import java.util.UUID;
 @Service
 public class DispatchProcessor extends PaymentProcessor {
 
+    @Autowired
+    private JmsService jmsService;
+
     @Override
     public void process(PaymentContext paymentContext) {
 
@@ -38,6 +41,9 @@ public class DispatchProcessor extends PaymentProcessor {
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
                 jaxbMarshaller.marshal(paymentContext.getPayment(), file);
+                paymentContext.setState(State.DONE);
+            } else if(Channel.MQ.equals(paymentContext.getChannel())) {
+                jmsService.send(paymentContext.getPayment().toString());
                 paymentContext.setState(State.DONE);
             } else {
                 paymentContext.setState(State.DISPATCH_ERROR);
