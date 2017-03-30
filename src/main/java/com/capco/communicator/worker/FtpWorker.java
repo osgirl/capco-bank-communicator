@@ -3,6 +3,7 @@ package com.capco.communicator.worker;
 import com.capco.communicator.PaymentFormat;
 import com.capco.communicator.PaymentUtil;
 import com.capco.communicator.repository.PaymentContextRepository;
+import com.capco.communicator.schema.Channel;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
 import org.apache.commons.io.IOUtils;
@@ -65,6 +66,7 @@ public class FtpWorker extends AbstractWorker {
     private PaymentContext createAndGetPaymentContext(File paymentFile, PaymentFormat paymentFormat) {
         PaymentContext paymentContext = new PaymentContext();
         paymentContext.setCreatedAt(new Date());
+        paymentContext.setChannel(Channel.FTP);
         paymentContext.setState(State.DECODE);
         paymentContext.setPaymentFormat(paymentFormat);
 

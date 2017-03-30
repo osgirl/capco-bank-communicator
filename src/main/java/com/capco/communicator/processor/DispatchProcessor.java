@@ -1,5 +1,6 @@
 package com.capco.communicator.processor;
 
+import com.capco.communicator.schema.Channel;
 import com.capco.communicator.schema.Payment;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
@@ -29,14 +30,18 @@ public class DispatchProcessor extends PaymentProcessor {
 
         try {
 
-            File file = new File(getOutputFilePath(paymentContext.getPayment().getBank().getOutputChannel()));
-            JAXBContext jaxbContext = JAXBContext.newInstance(Payment.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            if(Channel.FTP.equals(paymentContext.getChannel())) {
+                File file = new File(getOutputFilePath(paymentContext.getPayment().getBank().getOutputChannel()));
+                JAXBContext jaxbContext = JAXBContext.newInstance(Payment.class);
+                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            jaxbMarshaller.marshal(paymentContext.getPayment(), file);
-            paymentContext.setState(State.DONE);
+                jaxbMarshaller.marshal(paymentContext.getPayment(), file);
+                paymentContext.setState(State.DONE);
+            } else {
+                paymentContext.setState(State.DISPATCH_ERROR);
+            }
 
         } catch (JAXBException e) {
             paymentContext.setState(State.DISPATCH_ERROR);
