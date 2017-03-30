@@ -19,5 +19,4 @@ public class DecodeProcessor extends PaymentProcessor {
         paymentContext.setState(State.VALIDATE);
         paymentContextRepository.save(paymentContext);
     }
-
 }

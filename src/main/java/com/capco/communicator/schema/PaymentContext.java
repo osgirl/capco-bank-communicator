@@ -23,7 +23,7 @@ public class PaymentContext extends AbstractProcessingContext {
     public PaymentContext() {
     }
 
-    public PaymentContext(String resource, State state, Date createdAt, String channel) {
+    public PaymentContext(String resource, State state, Date createdAt, Channel channel) {
         this.resource = resource;
         this.state = state;
         this.createdAt = createdAt;
@@ -53,7 +53,7 @@ public class PaymentContext extends AbstractProcessingContext {
     @Cascade(CascadeType.ALL)
     private Payment payment;
 
-    private String channel;
+    private Channel channel;
 
     private PaymentFormat paymentFormat;
 
@@ -97,11 +97,11 @@ public class PaymentContext extends AbstractProcessingContext {
         this.payment = payment;
     }
 
-    public String getChannel() {
+    public Channel getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    public void setChannel(Channel channel) {
         this.channel = channel;
     }
 

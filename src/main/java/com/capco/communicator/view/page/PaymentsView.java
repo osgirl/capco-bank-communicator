@@ -15,6 +15,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -118,7 +119,8 @@ public class PaymentsView extends Panel implements View{
 
     void listPayments(String text) {
         if (StringUtils.isEmpty(text)) {
-            table.setContainerDataSource(new BeanItemContainer(Payment.class, repo.findAll()));
+            table.setContainerDataSource(new BeanItemContainer(
+                    Payment.class, IteratorUtils.toList(repo.findAll().iterator())));
         }
     }
 

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +28,8 @@ public class FtpWorker extends AbstractWorker {
 
     private static final Logger logger = Logger.getLogger(FtpWorker.class.toString());
 
+    private static List<String> processedFiles = new ArrayList<>();
+
     @Autowired
     private PaymentContextRepository paymentContextRepository;
 
@@ -34,17 +38,30 @@ public class FtpWorker extends AbstractWorker {
         if (payment01Dir.exists()) {
             createContexts(payment01Dir, PaymentFormat.PAIN_01);
         }
+
         File payment02Dir = new File(PaymentUtil.getFtpDirPath() + File.separator + "payment.001.001.002");
         if (payment02Dir.exists()) {
             createContexts(payment02Dir, PaymentFormat.PAIN_02);
+        }
+
+        File payment99Dir = new File(PaymentUtil.getFtpDirPath() + File.separator + "payment.001.001.099");
+        if (payment99Dir.exists()) {
+            createContexts(payment99Dir, PaymentFormat.PAIN_99);
         }
     }
 
     private void createContexts(File paymentDir, PaymentFormat paymentFormat) {
         for (File paymentFile : paymentDir.listFiles()) {
-            PaymentContext paymentContext = createAndGetPaymentContext(paymentFile, paymentFormat);
-            paymentContextRepository.save(paymentContext);
-            paymentFile.delete();
+            String fileAbsolutePath = paymentFile.getAbsolutePath();
+
+            if(!processedFiles.contains(fileAbsolutePath)){
+                PaymentContext paymentContext = createAndGetPaymentContext(paymentFile, paymentFormat);
+                paymentContextRepository.save(paymentContext);
+
+                if(!paymentFile.delete()){
+                    processedFiles.add(fileAbsolutePath);
+                }
+            }
         }
     }
 
@@ -53,6 +70,7 @@ public class FtpWorker extends AbstractWorker {
         paymentContext.setCreatedAt(new Date());
         paymentContext.setState(State.DECODE);
         paymentContext.setPaymentFormat(paymentFormat);
+
         try {
             paymentContext.setResource(IOUtils.toString(new FileInputStream(paymentFile)));
         } catch (IOException e) {
@@ -61,5 +79,4 @@ public class FtpWorker extends AbstractWorker {
 
         return paymentContext;
     }
-
 }

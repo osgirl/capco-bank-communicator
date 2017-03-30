@@ -3,6 +3,7 @@ package com.capco.communicator.worker;
 import com.capco.communicator.processor.*;
 import com.capco.communicator.repository.PaymentContextRepository;
 import com.capco.communicator.schema.PaymentContext;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,27 +18,35 @@ public class PaymentWorker extends AbstractWorker {
 
     @Autowired
     private PaymentContextRepository paymentContextRepository;
+
     @Autowired
     private DecodeProcessor decodeProcessor;
+
     @Autowired
     private ValidateProcessor validateProcessor;
+
     @Autowired
     private TransformProcessor transformProcessor;
+
     @Autowired
     private DuplicateCheckProcessor duplicateCheckProcessor;
+
     @Autowired
     private CorrelateProcessor correlateProcessor;
+
     @Autowired
     private RulesProcessor rulesProcessor;
+
     @Autowired
     private ApproveProcessor approveProcessor;
+
     @Autowired
     private DispatchProcessor dispatchProcessor;
 
-
     protected void performJob() {
-        List<PaymentContext> allPaymentContext = paymentContextRepository.findAll();
+        List<PaymentContext> allPaymentContext = IteratorUtils.toList(paymentContextRepository.findAll().iterator());
         PaymentProcessor processor = null;
+
         for (PaymentContext paymentContext : allPaymentContext) {
             switch (paymentContext.getState()) {
                 case DECODE:

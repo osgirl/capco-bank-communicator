@@ -37,7 +37,7 @@ public class Application {
     private static final Integer NUM_OF_GENERATED_BANKS = 4;
     private static final Integer NUM_OF_GENERATED_ACCOUNTS = 4;
     private static final Integer NUM_OF_GENERATED_PAYMENTS = 4;
-    private static final Integer NUM_OF_GENERATED_PAYMENT_CONTEXTS = 4;
+    private static final Integer NUM_OF_GENERATED_PAYMENT_CONTEXTS = 0;
 
     @Autowired
     private FtpWorker ftpWorker;
@@ -116,7 +116,7 @@ public class Application {
             paymentContext.setResource("Context_" + i + "_resource");
             paymentContext.setState(State.DONE);
             paymentContext.setCreatedAt(new Date(Math.abs(System.currentTimeMillis() - RandomUtils.nextLong(86400000, 326400000))));
-            paymentContext.setChannel("OLD" + i + "-mq-channel");
+            paymentContext.setChannel(Channel.FTP);
 
             Payment payment = new Payment();
             payment.setBank(bankRepository.findByCode("HISTORY_BANK"));

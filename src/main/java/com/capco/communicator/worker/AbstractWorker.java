@@ -28,9 +28,7 @@ public abstract class AbstractWorker {
                 }
                 diff = System.currentTimeMillis() - start;
             }
-
         }
-
     }
 
     protected abstract void performJob();

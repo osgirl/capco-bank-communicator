@@ -4,6 +4,7 @@ import com.capco.communicator.processor.CorrelateProcessor;
 import com.capco.communicator.processor.DispatchProcessor;
 import com.capco.communicator.processor.TransformProcessor;
 import com.capco.communicator.processor.ValidateProcessor;
+import com.capco.communicator.schema.Channel;
 import com.capco.communicator.schema.PaymentContext;
 import com.capco.communicator.schema.State;
 import com.capco.communicator.service.JmsService;
@@ -49,8 +50,22 @@ public class WorkshopTaskTester {
                     "    </pain.001.001.99>\n" +
                     "</Document>";
 
+
     @Test
-    public void task_1_test() throws IOException {
+    public void task_1_test(){
+        PaymentContext context = new PaymentContext();
+        context.setState(State.VALIDATE);
+        context.setCreatedAt(new Date());
+        context.setPaymentFormat(PaymentFormat.PAIN_99);
+        context.setResource(payment);
+
+        validateProcessor.process(context);
+
+        Assert.assertEquals(State.TRANSFORM, context.getState());
+    }
+
+    @Test
+    public void task_2_test() throws IOException {
         PaymentContext context = new PaymentContext();
         context.setState(State.VALIDATE);
         context.setCreatedAt(new Date());
@@ -67,7 +82,7 @@ public class WorkshopTaskTester {
     }
 
     @Test
-    public void task_2_test(){
+    public void task_3_test(){
         PaymentContext context = new PaymentContext();
         context.setState(State.TRANSFORM);
         context.setCreatedAt(new Date());
@@ -86,26 +101,13 @@ public class WorkshopTaskTester {
     }
 
     @Test
-    public void task_3_test(){
-        PaymentContext context = new PaymentContext();
-        context.setState(State.VALIDATE);
-        context.setCreatedAt(new Date());
-        context.setPaymentFormat(PaymentFormat.PAIN_99);
-        context.setResource(payment);
-
-        validateProcessor.process(context);
-
-        Assert.assertEquals(State.TRANSFORM, context.getState());
-    }
-
-    @Test
     public void task_4_test(){
         PaymentContext context = new PaymentContext();
         context.setState(State.DISPATCH);
         context.setCreatedAt(new Date());
         context.setPaymentFormat(PaymentFormat.PAIN_99);
         context.setResource(payment);
-        context.setChannel("mq");
+        context.setChannel(Channel.MQ);
 
         validateProcessor.process(context);
         transformProcessor.process(context);

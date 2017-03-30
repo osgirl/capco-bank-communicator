@@ -32,8 +32,7 @@ public class ValidateProcessor extends PaymentProcessor {
 
         try {
             executeSchemaValidation(paymentContext);
-
-            paymentContext.setState(State.TRANSFORM);
+            paymentContext.setState(State.VALIDATE_ERROR);
 
         } catch (PaymentProcessingException | IOException | SAXException e) {
 

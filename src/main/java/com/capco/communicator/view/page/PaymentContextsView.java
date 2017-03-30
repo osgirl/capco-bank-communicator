@@ -13,6 +13,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -118,7 +119,7 @@ public class PaymentContextsView extends Panel implements View {
             return stateSelect;
         });
 
-        table.addGeneratedColumn("Payment Detail", (Table.ColumnGenerator) (source, item, columnId) -> {
+        table.addGeneratedColumn("Detail", (Table.ColumnGenerator) (source, item, columnId) -> {
             Button btn = new Button("Show");
             btn.addStyleName(ValoTheme.BUTTON_SMALL);
 
@@ -143,18 +144,25 @@ public class PaymentContextsView extends Panel implements View {
         paymentDetailContentLayout.setMargin(true);
         paymentDetailContentLayout.setSpacing(true);
 
-        Label title = new Label("Payment ID' " + paymentContext.getPayment().getId() + "' detail:");
-        title.addStyleName(ValoTheme.LABEL_H3);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        title.addStyleName(ValoTheme.LABEL_BOLD);
-        paymentDetailContentLayout.addComponent(title);
+        if(paymentContext.getPayment() != null){
+            Label title = new Label("Payment ID '" + paymentContext.getPayment().getId() + "' detail:");
+            title.addStyleName(ValoTheme.LABEL_H3);
+            title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+            title.addStyleName(ValoTheme.LABEL_BOLD);
+            paymentDetailContentLayout.addComponent(title);
 
-        paymentDetailContentLayout.addComponent(new Label("Bank code: " + paymentContext.getPayment().getBank().getCode()));
-        paymentDetailContentLayout.addComponent(new Label("Account code: " + paymentContext.getPayment().getAccount().getCode()));
-        paymentDetailContentLayout.addComponent(new Label("Credit: " + paymentContext.getPayment().getCredit()));
-        paymentDetailContentLayout.addComponent(new Label("Debit:  " + paymentContext.getPayment().getDebit()));
-        paymentDetailContentLayout.addComponent(new Label("Iban:  " + paymentContext.getPayment().getIban()));
-        paymentDetailContentLayout.addComponent(new Label("Notice:  " + paymentContext.getPayment().getNotice()));
+            paymentDetailContentLayout.addComponent(new Label("Bank code: " + paymentContext.getPayment().getBank().getCode()));
+            paymentDetailContentLayout.addComponent(new Label("Account code: " + paymentContext.getPayment().getAccount().getCode()));
+            paymentDetailContentLayout.addComponent(new Label("Credit: " + paymentContext.getPayment().getCredit()));
+            paymentDetailContentLayout.addComponent(new Label("Debit:  " + paymentContext.getPayment().getDebit()));
+            paymentDetailContentLayout.addComponent(new Label("Iban:  " + paymentContext.getPayment().getIban()));
+            paymentDetailContentLayout.addComponent(new Label("Notice:  " + paymentContext.getPayment().getNotice()));
+            paymentDetailContentLayout.addComponent(new Label("Reference: " + paymentContext.getPayment().getReference()));
+            paymentDetailContentLayout.addComponent(new Label("Confirmation: " + paymentContext.getPayment().isConfirmation()));
+
+        } else {
+            paymentDetailContentLayout.addComponent(new Label("No payment in this State of Payment Context."));
+        }
 
         if (paymentDetailWindow == null) {
             paymentDetailWindow = new Window();
@@ -165,6 +173,7 @@ public class PaymentContextsView extends Panel implements View {
             paymentDetailWindow.setDraggable(false);
             paymentDetailWindow.setCloseShortcut(ShortcutAction.KeyCode.ESCAPE, null);
         }
+
         paymentDetailWindow.setContent(paymentDetailContentLayout);
 
         if (!paymentDetailWindow.isAttached()) {
@@ -177,7 +186,8 @@ public class PaymentContextsView extends Panel implements View {
     }
 
     void listPaymentContexts() {
-        table.setContainerDataSource(new BeanItemContainer(PaymentContext.class, repo.findAll()));
+        table.setContainerDataSource(new BeanItemContainer(
+                PaymentContext.class, IteratorUtils.toList(repo.findAll().iterator())));
     }
 
     @Override

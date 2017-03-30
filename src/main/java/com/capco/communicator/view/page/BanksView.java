@@ -13,6 +13,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -144,7 +145,7 @@ public class BanksView extends Panel implements View{
 
     void listBanks(String text) {
         if (StringUtils.isEmpty(text)) {
-            table.setContainerDataSource(new BeanItemContainer(Bank.class, repo.findAll()));
+            table.setContainerDataSource(new BeanItemContainer(Bank.class, IteratorUtils.toList(repo.findAll().iterator())));
         } else {
             table.setContainerDataSource(new BeanItemContainer(Bank.class,
                     repo.findByCodeStartsWithIgnoreCase(text)));

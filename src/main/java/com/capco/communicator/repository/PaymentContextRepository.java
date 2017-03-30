@@ -1,11 +1,11 @@
 package com.capco.communicator.repository;
 
 import com.capco.communicator.schema.PaymentContext;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * Repository handling PaymentContext entities.
  * */
-public interface PaymentContextRepository extends JpaRepository<PaymentContext, Long> {
+public interface PaymentContextRepository extends CrudRepository<PaymentContext, Long> {
 
 }
