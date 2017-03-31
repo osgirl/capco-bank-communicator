@@ -35,7 +35,7 @@ correctness of implementation.
 
 If you want to implement the tasks yourself, please checkout the branch 'tasks-incomplete'.
 Branch master contains source code with completed tasks. There is no need to create ftp
-folders and subfolders (as we did on the workshop), as they are already prepared. 
+folders and sub-folders (as we did on the workshop), as they are already prepared. 
 
 There are 2 ways to test your progress:
 1. Using test class WorkshopTaskTester.java (do not forget to comment out the @Ignore 
@@ -79,7 +79,7 @@ private void executeSchemaValidation(PaymentContext paymentContext) throws Payme
 }
 ```
    	
-Of course, do not forget to set the state of PaymentContext entity to State.TRANSFORM after succesfull validation.
+Of course, do not forget to set the state of PaymentContext entity to State.TRANSFORM after successful validation.
    	
 ### Task 2: Transform Processor
 The purpose of this task is to create a new XSLT template to transform the payment of type 99 to a target format.
@@ -162,17 +162,10 @@ if(Channel.FTP.equals(paymentContext.getChannel())) {
    paymentContext.setState(State.DISPATCH_ERROR);
 }
 ```
-   		
-Also, we need to change the channel of the message loaded from the XML file. To do that, change the paymentContext channel
-using following code:
-   
-```java
-paymentContext.setChannel(Channel.MQ);
-```
-   	
-in the createAndGetPaymentContext() method of FtpWorker class. After completing these steps, you should alse see a message
+  	
+After completing these steps, you should also see a message
 with the payment in the logs. Of course, in reality, there would be other application on the receiving end of the message broker,
 we have added simple JmsReceiver to illustrate that the message is really created and send.
    	
-All tasks are bnow implemented, good job and well done :)	
+All tasks are now implemented, good job and well done :)	
    			 
