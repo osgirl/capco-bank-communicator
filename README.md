@@ -58,7 +58,7 @@ In ValidateProcessor class, there is a need to implement the executeSchemaValida
 of this method is to validate the incoming payment against the XSD schema. Of course, there are multiple 
 methods of achieving this. One of them is following:
 
-```
+```java
 private void executeSchemaValidation(PaymentContext paymentContext) throws PaymentProcessingException, SAXException, IOException {
    // Validate resource in process context against valid xsd schema depending on paymentFormat in this method:
    // a) Load the schema (use Schema instance)
@@ -86,7 +86,7 @@ The purpose of this task is to create a new XSLT template to transform the payme
 To complete this task, you can inspire from other used XSLT templates, as there are only minor changes in our payment format.
 Following XSLT template should be used:
    
-```  
+```java  
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
    <!-- Output with indentation. -->
    <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="no" indent="yes"/>
@@ -117,7 +117,7 @@ The purpose of task 3 is to implement locating a target Bank of the payment. You
 how other elements are searched for in CorrelateProcessor. The implementation of findBank() methods can be
 following:
    
-```
+```java
 private Bank findBank(Document doc, PaymentContext paymentContext){
    Element bankElement = (Element) doc.getElementsByTagName(ELEMENT_BANK_CODE).item(0);
    String bankCode = getCharacterDataFromElement(bankElement);
@@ -138,14 +138,14 @@ This service accepts String messages, so we can use toString() method of Payment
       
 First, we need to @Autowire the JmsService instance:
    
-```
+```java
 @Autowired
 private JmsService jmsService;
 ```
    	
 Then, we need to implement sending the message to MQ:
 
-```
+```java
 if(Channel.FTP.equals(paymentContext.getChannel())) {
    File file = new File(getOutputFilePath(paymentContext.getPayment().getBank().getOutputChannel()));
    JAXBContext jaxbContext = JAXBContext.newInstance(Payment.class);
@@ -166,7 +166,7 @@ if(Channel.FTP.equals(paymentContext.getChannel())) {
 Also, we need to change the channel of the message loaded from the XML file. To do that, change the paymentContext channel
 using following code:
    
-```
+```java
 paymentContext.setChannel(Channel.MQ);
 ```
    	
