@@ -2,7 +2,7 @@
 # capco-bank-communicator 
 Connects, translates and normalizes any kind of data. The business agility layer that bridges the gap between business and IT. 
 
-##Exercises for workshop:
+## Exercises for workshop:
 
 1. Implement ValidateProcessor:
     Validate resource in process context against valid xsd schema depending on paymentFormat<br>
@@ -81,7 +81,7 @@ private void executeSchemaValidation(PaymentContext paymentContext) throws Payme
    	
 Of course, do not forget to set the state of PaymentContext entity to State.TRANSFORM after succesfull validation.
    	
-###Task 2: Transform Processor
+### Task 2: Transform Processor
 The purpose of this task is to create a new XSLT template to transform the payment of type 99 to a target format.
 To complete this task, you can inspire from other used XSLT templates, as there are only minor changes in our payment format.
 Following XSLT template should be used:
@@ -112,7 +112,7 @@ Following XSLT template should be used:
 </xsl:stylesheet>
 ```
    	
-###Task 3: Correlate Processor
+### Task 3: Correlate Processor
 The purpose of task 3 is to implement locating a target Bank of the payment. You can inspire by looking at
 how other elements are searched for in CorrelateProcessor. The implementation of findBank() methods can be
 following:
@@ -130,7 +130,7 @@ private Bank findBank(Document doc, PaymentContext paymentContext){
 }
 ```
    	
-###Task 4: Dispatch Processor
+### Task 4: Dispatch Processor
 Currently, the DispatchProcessor only sends the data to one channel, and that is FTP. The purpose of this task
 is to implement sending to another channel, MQ broker. We have used an embedded Active MQ broker instance,
 and to send a JMS message to this instance, you can use very simple JmsService implementation we have prepared.
