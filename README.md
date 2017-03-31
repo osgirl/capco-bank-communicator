@@ -158,6 +158,7 @@ if(Channel.FTP.equals(paymentContext.getChannel())) {
    
 } else if(Channel.MQ.equals(paymentContext.getChannel())) {
    jmsService.send(paymentContext.getPayment().toString());
+   paymentContext.setState(State.DONE);
 } else {
    paymentContext.setState(State.DISPATCH_ERROR);
 }
